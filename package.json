@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
+    "firebase": "^5.5.4",
     "vue": "^2.5.17",
+    "vuefire": "^1.4.5",
     "vuetify": "^1.2.0"
   },
   "devDependencies": {
