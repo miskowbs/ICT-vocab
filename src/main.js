@@ -2,10 +2,10 @@ import '@babel/polyfill'
 import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
-import '.firebase';
+import './firebase';
+import VueFire from 'vuefire';
 
 Vue.config.productionTip = false
-import VueFire from 'vuefire';
 
 Vue.use(VueFire);
 
