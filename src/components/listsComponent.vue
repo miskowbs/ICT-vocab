@@ -1,32 +1,75 @@
 <template>
-  <v-container fluid>
-    <v-slide-y-transition mode="out-in">
-      <v-layout row align-center class="elevation-12"> 
-        
+  <v-container fluid grid-list-lg class="elevation-12 ma-0"> 
+    <v-layout row align-center> 
         <v-flex xs12>
             <v-card>
                 <v-card-title primary-title>
                     <v-flex xs4>
-                        <h3 class="headline mb-4">Mitochondria</h3>
-                        <h4 class="mb-0">Biology-1B</h4>
+                        <h3 class="headline mb-auto">Mitochondria</h3>
+                        <h4 class="mb-auto">Biology-1B</h4>
                     </v-flex>
                     <v-spacer/>
                     <v-flex xs4>
-                        <h4 class="mb-4">Last Viewed: 2018/10/19</h4>
-                        <h4 class="mb-0">Last Changed: 2018/10/17</h4>
+                        <h4 class="mb-auto">Last Viewed: 2018/10/19</h4>
+                        <h4 class="mb-auto">Last Changed: 2018/10/17</h4>
                     </v-flex>
                     <v-flex xs2>
                         <h3>Words: 46</h3>
                     </v-flex>
                 </v-card-title>
             </v-card>
+        </v-flex>
+    </v-layout>
+    <v-layout row align-center > 
+        <v-flex xs12>
             <v-card>
-
+                <v-card-title primary-title>
+                    <v-flex xs4>
+                        <h3 class="headline auto">Mitochondria</h3>
+                        <h4 class="mb-auto">Biology-1B</h4>
+                    </v-flex>
+                    <v-spacer/>
+                    <v-flex xs4>
+                        <h4 class="mb-auto">Last Viewed: 2018/10/19</h4>
+                        <h4 class="mb-auto">Last Changed: 2018/10/17</h4>
+                    </v-flex>
+                    <v-flex xs2>
+                        <h3>Words: 46</h3>
+                    </v-flex>
+                </v-card-title>
             </v-card>
         </v-flex>
-
-      </v-layout>
-    </v-slide-y-transition>
+    </v-layout>
+    <v-layout row align-center > 
+        <v-flex xs12>
+            <v-card>
+                <v-card-title primary-title>
+                    <v-flex xs4>
+                        <h3 class="headline mb-auto">Mitochondria</h3>
+                        <h4 class="mb-auto">Biology-1B</h4>
+                    </v-flex>
+                    <v-spacer/>
+                    <v-flex xs4>
+                        <h4 class="mb-auto">Last Viewed: 2018/10/19</h4>
+                        <h4 class="mb-auto">Last Changed: 2018/10/17</h4>
+                    </v-flex>
+                    <v-flex xs2>
+                        <h3>Words: 46</h3>
+                    </v-flex>
+                </v-card-title>
+            </v-card>
+        </v-flex>
+    </v-layout>
+    <v-btn
+        color="pink"
+        dark
+        small
+        sticky
+        top
+        right
+        fab>
+        <v-icon>add</v-icon>
+    </v-btn>
   </v-container>
 </template>
 
