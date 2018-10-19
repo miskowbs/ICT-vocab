@@ -20,6 +20,7 @@
     </v-toolbar>
     <v-content>
       <HelloWorld/>
+      <listsComponent/>
     </v-content>
     
     <v-navigation-drawer
@@ -46,11 +47,13 @@
 
 <script>
 import HelloWorld from "./components/HelloWorld";
+import listsComponent from "./components/listsComponent";
 
 export default {
   name: "App",
   components: {
-    HelloWorld
+    HelloWorld,
+    listsComponent
   },
   data() {
     return {
