@@ -12,7 +12,7 @@
       :size='avatarSize'
       color='grey lighten-4'
       >
-        <img src="./assets/photo.jpg" alt="avatar">
+        <img v-bind:src="photoURL" alt="avatar">
       </v-avatar>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>menu</v-icon>
@@ -48,9 +48,27 @@
 <script>
 import HelloWorld from "./components/HelloWorld";
 import listsComponent from "./components/listsComponent";
+var firebase = require('firebase');
+var provider = new firebase.auth.GoogleAuthProvider();
 
 export default {
   name: "App",
+  beforeCreate: function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if(!user) {
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+        var token = result.credential.accessToken;
+
+        }).catch(function(error) {
+          console.log(error);
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          var email = error.email;
+          var credential = error.credential;
+        })
+      }
+    })
+  },
   components: {
     HelloWorld,
     listsComponent
@@ -75,8 +93,33 @@ export default {
   },
   computed: {
     avatarSize() {
+      console.log("weee");
       return "35px";
       //for the time being, keep it this way.
+    },
+    user() {
+      console.log("a");
+      firebase.auth().onAuthStateChanged(function(user) {
+        console.log('AuthChanged');
+        if(user) {
+          
+          return user;
+        }
+      });
+    },
+    photoURL() {
+      console.log("b");
+      if(firebase.auth().currentUser) {
+        console.log(firebase.auth().currentUser);
+        return firebase.auth().currentUser.providerData[0].photoURL;
+      } else {
+        firebase.auth().onAuthStateChanged(function(user) {
+        console.log('AuthChanged');
+        if(user) {
+          return user.providerData[0].photoURL;
+        }
+      });
+      }
     }
   }
 };
