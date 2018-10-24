@@ -6,6 +6,7 @@ import './firebase';
 import VueFire from 'vuefire';
 
 var firebase = require('firebase');
+
 Vue.config.productionTip = false
 
 Vue.use(VueFire);

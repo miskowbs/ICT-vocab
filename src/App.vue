@@ -93,12 +93,10 @@ export default {
   },
   computed: {
     avatarSize() {
-      console.log("weee");
       return "35px";
       //for the time being, keep it this way.
     },
     user() {
-      console.log("a");
       firebase.auth().onAuthStateChanged(function(user) {
         console.log('AuthChanged');
         if(user) {
@@ -108,7 +106,6 @@ export default {
       });
     },
     photoURL() {
-      console.log("b");
       if(firebase.auth().currentUser) {
         console.log(firebase.auth().currentUser);
         return firebase.auth().currentUser.providerData[0].photoURL;
