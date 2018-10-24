@@ -9,14 +9,12 @@
       <v-spacer></v-spacer>
       <v-avatar
       :tile='tile'
-      :size='avatarSize'
       color='grey lighten-4'
+      icon
+      @click="rightDrawer = !rightDrawer"
       >
-        <img v-bind:src="photoURL" alt="avatar">
+        <img :src="photoURL" alt="Avatar">
       </v-avatar>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
-      </v-btn>
     </v-toolbar>
     <v-content>
       <HelloWorld/>
@@ -54,11 +52,12 @@ var provider = new firebase.auth.GoogleAuthProvider();
 export default {
   name: "App",
   beforeCreate: function() {
+    var vm = this;
     firebase.auth().onAuthStateChanged(function(user) {
       if(!user) {
+        console.log("New User");
         firebase.auth().signInWithPopup(provider).then(function(result) {
-        var token = result.credential.accessToken;
-
+        var token = result.credential.accessToken; 
         }).catch(function(error) {
           console.log(error);
           var errorCode = error.code;
@@ -66,8 +65,14 @@ export default {
           var email = error.email;
           var credential = error.credential;
         })
+      } else {
+        vm.firebaseUser = user;
+        vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
       }
     })
+  },
+  created() {
+    
   },
   components: {
     HelloWorld,
@@ -88,36 +93,11 @@ export default {
       right: true,
       rightDrawer: false,
       title: "ICT Vocab",
-      tile: false
+      tile: false,
+      firebaseUser: {},
+      photoURL: {}
     };
-  },
-  computed: {
-    avatarSize() {
-      return "35px";
-      //for the time being, keep it this way.
-    },
-    user() {
-      firebase.auth().onAuthStateChanged(function(user) {
-        console.log('AuthChanged');
-        if(user) {
-          
-          return user;
-        }
-      });
-    },
-    photoURL() {
-      if(firebase.auth().currentUser) {
-        console.log(firebase.auth().currentUser);
-        return firebase.auth().currentUser.providerData[0].photoURL;
-      } else {
-        firebase.auth().onAuthStateChanged(function(user) {
-        console.log('AuthChanged');
-        if(user) {
-          return user.providerData[0].photoURL;
-        }
-      });
-      }
-    }
   }
 };
 </script>
+
