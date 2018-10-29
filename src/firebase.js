@@ -9,5 +9,4 @@ const app = initializeApp({
     messagingSenderId: "667672592486"
 });
 
-export const db = app.database();
-export const NamesRef = db.ref('names');
+export const db = app.firestore();
