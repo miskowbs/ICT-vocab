@@ -62,49 +62,26 @@
     </v-layout>
     <v-dialog
         v-model="newList"
-        persistent
     >
         <v-card>
           <v-card-title>
-            <span class="headline">User Profile</span>
+            <span class="headline">New List</span>
           </v-card-title>
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field label="Legal first name" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    label="Legal last name"
-                    hint="example of persistent helper text"
-                    persistent-hint
-                    required
-                  ></v-text-field>
+                <v-flex xs12>
+                  <v-text-field label="List Name*" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Email" required></v-text-field>
+                  <v-text-field label="Subject"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Password" type="password" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6>
                   <v-select
-                    :items="['0-17', '18-29', '30-54', '54+']"
-                    label="Age"
+                    :items="['en', 'someJp', 'jp']"
+                    label="Language Level*"
                     required
                   ></v-select>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-autocomplete
-                    :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                    label="Interests"
-                    multiple
-                    chips
-                  ></v-autocomplete>
                 </v-flex>
               </v-layout>
             </v-container>
