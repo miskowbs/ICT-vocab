@@ -118,11 +118,7 @@ export default {
   data() {
     return {
       newListShow: false,
-      newList: {
-        title: "",
-        subject: "",
-        languageLevel: ""
-      }
+      newList: { }
     };
   },
   firestore() {
@@ -132,10 +128,15 @@ export default {
   },
   methods: {
     addList() {
-      console.log(this.newListShow);
       console.log(this.newList.title);
       console.log(this.newList.languageLevel);
+
+      if(this.newList) {
+        //TODO: add new list here (figure out user stuff as well)
+      }
+
       this.newListShow = false;
+      this.newList = { };
     }
   }
 };

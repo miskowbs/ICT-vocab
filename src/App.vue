@@ -35,6 +35,12 @@
           </v-list-tile-action>
           <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
         </v-list-tile>
+        <v-list-tile @click="logOut()">
+          <v-list-tile-action>
+            <v-icon>logout</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Log Out</v-list-tile-title>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-footer :fixed="fixed" app>
@@ -46,6 +52,7 @@
 <script>
 import HelloWorld from "./components/HelloWorld";
 import listsComponent from "./components/listsComponent";
+import { users } from "./firebase";
 var firebase = require('firebase');
 var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -58,6 +65,8 @@ export default {
         console.log("New User");
         firebase.auth().signInWithPopup(provider).then(function(result) {
         var token = result.credential.accessToken; 
+        console.log(result.user.getUid());
+        if(result.isNewUser) {}
         }).catch(function(error) {
           console.log(error);
           var errorCode = error.code;
@@ -66,6 +75,7 @@ export default {
           var credential = error.credential;
         })
       } else {
+        console.log(user.providerData[0].uid);
         vm.firebaseUser = user;
         vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
       }
@@ -97,6 +107,11 @@ export default {
       firebaseUser: {},
       photoURL: {}
     };
+  },
+  methods: {
+    logOut() {
+      firebase.auth().signOut();
+    }
   }
 };
 </script>
