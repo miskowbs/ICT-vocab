@@ -61,7 +61,7 @@
         </v-flex>
     </v-layout>
     <v-dialog
-        v-model="newList"
+        v-model="newListShow"
     >
         <v-card>
           <v-card-title>
@@ -71,15 +71,16 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="List Name*" required></v-text-field>
+                  <v-text-field label="List Name*" v-model="newList.title" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Subject"></v-text-field>
+                  <v-text-field label="Subject" v-model="newList.subject"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-select
                     :items="['en', 'someJp', 'jp']"
                     label="Language Level*"
+                    v-model="newList.languageLevel"
                     required
                   ></v-select>
                 </v-flex>
@@ -89,8 +90,8 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="newList = false">Close</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="newList = false">Save</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="newListShow = false">Close</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="addList()">Save</v-btn>
           </v-card-actions>
         </v-card>
     </v-dialog>
@@ -102,7 +103,7 @@
         top
         right
         fab
-        @click="newList = true">
+        @click="newListShow = true">
         <v-icon>add</v-icon>
     </v-btn>
   </v-container>
@@ -116,7 +117,12 @@ export default {
   props: {},
   data() {
     return {
-      newList: false
+      newListShow: false,
+      newList: {
+        title: "",
+        subject: "",
+        languageLevel: ""
+      }
     };
   },
   firestore() {
@@ -124,11 +130,14 @@ export default {
       users: users
     }
   },
-    methods: {
-        addList() {
-
-        }
+  methods: {
+    addList() {
+      console.log(this.newListShow);
+      console.log(this.newList.title);
+      console.log(this.newList.languageLevel);
+      this.newListShow = false;
     }
+  }
 };
 </script>
 
