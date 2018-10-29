@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import db from "../firebase";
+import { users } from "../firebase";
 
 export default {
   name: "listsComponent",
@@ -142,16 +142,16 @@ export default {
       newList: false
     };
   },
-  // firestore() {
-  //   return {
-  //     users: db.collection('users')
-  //   }
-  // },
-  //   methods: {
-  //       addList() {
+  firestore() {
+    return {
+      users: users
+    }
+  },
+    methods: {
+        addList() {
 
-  //       }
-  //   }
+        }
+    }
 };
 </script>
 

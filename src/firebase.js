@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase';
+const settings = { timestampsInSnapshots: true };
 
 const app = initializeApp({
     apiKey: "AIzaSyBLg11jwPhQW1OtvASTBWTzJFZCj5AInwI",
@@ -10,3 +11,5 @@ const app = initializeApp({
 });
 
 export const db = app.firestore();
+db.settings(settings);
+export const users = db.collection('users');
