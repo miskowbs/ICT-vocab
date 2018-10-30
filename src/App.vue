@@ -18,7 +18,7 @@
     </v-toolbar>
     <v-content>
       <HelloWorld/>
-      <listsComponent/>
+      <listsComponent :firebaseUser=firebaseUser />
     </v-content>
     
     <v-navigation-drawer
@@ -62,11 +62,11 @@ export default {
     var vm = this;
     firebase.auth().onAuthStateChanged(function(user) {
       if(!user) {
-        console.log("New User");
         firebase.auth().signInWithPopup(provider).then(function(result) {
         var token = result.credential.accessToken; 
-        console.log(result.user.getUid());
-        if(result.isNewUser) {}
+        if(result.isNewUser) {
+          console.log("Is a New User");
+        }
         }).catch(function(error) {
           console.log(error);
           var errorCode = error.code;
@@ -75,9 +75,9 @@ export default {
           var credential = error.credential;
         })
       } else {
-        console.log(user.providerData[0].uid);
         vm.firebaseUser = user;
         vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
+        
       }
     })
   },

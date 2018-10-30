@@ -53,12 +53,17 @@
                         <h4 class="mb-auto">Last Viewed: 2018/10/19</h4>
                         <h4 class="mb-auto">Last Changed: 2018/10/17</h4>
                     </v-flex>
-                    <v-flex xs2>
+                    <v-flex xs2>sers
                         <h3>Words: 46</h3>
                     </v-flex>
                 </v-card-title>
             </v-card>
         </v-flex>
+    </v-layout>
+    <v-layout
+      v-for="list in vocabLists"
+      :key="list.id">
+
     </v-layout>
     <v-dialog
         v-model="newListShow"
@@ -71,7 +76,7 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="List Name*" v-model="newList.title" required></v-text-field>
+                  <v-text-field label="List Name*" v-model="newList.listTitle" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field label="Subject" v-model="newList.subject"></v-text-field>
@@ -111,28 +116,37 @@
 
 <script>
 import { users } from "../firebase";
+var firebase = require('firebase');
 
 export default {
   name: "listsComponent",
-  props: {},
+  props: {
+    firebaseUser: {}
+  },
   data() {
     return {
       newListShow: false,
-      newList: { }
+      newList: {},
+      vocabLists: []
     };
   },
   firestore() {
     return {
-      users: users
+      vocabLists: users.doc(this.firebaseUser.uid).collection('wordLists')
     }
   },
   methods: {
     addList() {
       console.log(this.newList.title);
       console.log(this.newList.languageLevel);
+      console.log('Uid ' + this.firebaseUser.uid); //<-- This is the User UID stored in Firebase auth
 
       if(this.newList) {
         //TODO: add new list here (figure out user stuff as well)
+        console.log('adding List');
+        console.log(users.doc(this.firebaseUser.uid).id);
+        users.doc(this.firebaseUser.uid).collection('wordLists').add(this.newList);
+        
       }
 
       this.newListShow = false;
