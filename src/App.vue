@@ -17,7 +17,6 @@
       </v-avatar>
     </v-toolbar>
     <v-content>
-      <HelloWorld/>
       <listsComponent 
       :firebaseUser=firebaseUser
       v-if="renderListOfLists" />
@@ -52,7 +51,6 @@
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
 import listsComponent from "./components/listsComponent";
 import { users } from "./firebase";
 var firebase = require('firebase');
@@ -87,7 +85,6 @@ export default {
     
   },
   components: {
-    HelloWorld,
     listsComponent
   },
   data() {
