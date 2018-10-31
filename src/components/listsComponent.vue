@@ -53,7 +53,7 @@
                         <h4 class="mb-auto">Last Viewed: 2018/10/19</h4>
                         <h4 class="mb-auto">Last Changed: 2018/10/17</h4>
                     </v-flex>
-                    <v-flex xs2>sers
+                    <v-flex xs2>
                         <h3>Words: 46</h3>
                     </v-flex>
                 </v-card-title>
@@ -62,8 +62,25 @@
     </v-layout>
     <v-layout
       v-for="list in vocabLists"
-      :key="list.id">
-
+      :key="list['.key']">
+      <v-flex xs12>
+            <v-card>
+                <v-card-title primary-title>
+                    <v-flex xs4>
+                        <h3 class="headline mb-auto">{{ list.listTitle }}</h3>
+                        <h4 class="mb-auto">{{ list.subject }}</h4>
+                    </v-flex>
+                    <v-spacer/>
+                    <v-flex xs4>
+                        <h4 class="mb-auto">Last Viewed: 2018/10/19</h4>
+                        <h4 class="mb-auto">Last Changed: 2018/10/17</h4>
+                    </v-flex>
+                    <v-flex xs2>
+                        <h3>Words: 46</h3>
+                    </v-flex>
+                </v-card-title>
+            </v-card>
+        </v-flex>
     </v-layout>
     <v-dialog
         v-model="newListShow"
@@ -132,7 +149,7 @@ export default {
   },
   firestore() {
     return {
-      vocabLists: users.doc(this.firebaseUser.uid).collection('wordLists')
+      vocabLists: users.doc(/*this.firebaseUser.uid*/'jP1eGX03czdoKK9yt4VEOZVSh1a2').collection('wordLists')
     }
   },
   methods: {
