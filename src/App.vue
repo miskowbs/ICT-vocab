@@ -18,7 +18,9 @@
     </v-toolbar>
     <v-content>
       <HelloWorld/>
-      <listsComponent :firebaseUser=firebaseUser />
+      <listsComponent 
+      :firebaseUser=firebaseUser
+      v-if="renderListOfLists" />
     </v-content>
     
     <v-navigation-drawer
@@ -77,7 +79,7 @@ export default {
       } else {
         vm.firebaseUser = user;
         vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
-        
+        vm.renderListOfLists = true;
       }
     })
   },
@@ -105,7 +107,8 @@ export default {
       title: "ICT Vocab",
       tile: false,
       firebaseUser: {},
-      photoURL: {}
+      photoURL: {},
+      renderListOfLists: false
     };
   },
   methods: {

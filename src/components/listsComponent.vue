@@ -149,7 +149,7 @@ export default {
   },
   firestore() {
     return {
-      vocabLists: users.doc(/*this.firebaseUser.uid*/'jP1eGX03czdoKK9yt4VEOZVSh1a2').collection('wordLists')
+      vocabLists: users.doc(this.firebaseUser.uid/*'jP1eGX03czdoKK9yt4VEOZVSh1a2'*/).collection('wordLists')
     }
   },
   methods: {
