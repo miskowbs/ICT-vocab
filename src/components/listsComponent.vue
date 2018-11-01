@@ -12,11 +12,11 @@
                     </v-flex>
                     <v-spacer/>
                     <v-flex xs4>
-                        <h4 class="mb-auto">Last Viewed: 2018/10/19</h4>
-                        <h4 class="mb-auto">Last Changed: 2018/10/17</h4>
+                        <h4 class="mb-auto">Last Viewed: {{ list.lastViewed.toDate().toLocaleDateString('ja-JP') }} </h4>
+                        <h4 class="mb-auto">Last Changed: {{ list.lastChanged.toDate().toLocaleDateString('ja-JP') }} </h4>
                     </v-flex>
                     <v-flex xs2>
-                        <h3>Words: 46</h3>
+                        <h3>Words: {{ list.wordCount }} </h3>
                     </v-flex>
                 </v-card-title>
             </v-card>
@@ -89,20 +89,25 @@ export default {
   },
   firestore() {
     return {
-      vocabLists: users.doc(this.firebaseUser.uid/*'jP1eGX03czdoKK9yt4VEOZVSh1a2'*/).collection('wordLists')
+      vocabLists: users.doc(this.firebaseUser.uid).collection('wordLists')
     }
   },
   methods: {
     addList() {
-      console.log(this.newList.title);
-      console.log(this.newList.languageLevel);
       console.log('Uid ' + this.firebaseUser.uid); //<-- This is the User UID stored in Firebase auth
 
       if(this.newList) {
-        //TODO: add new list here (figure out user stuff as well)
         console.log('adding List');
-        console.log(users.doc(this.firebaseUser.uid).id);
-        users.doc(this.firebaseUser.uid).collection('wordLists').add(this.newList);
+        var toAdd = this.newList;
+        users.doc(this.firebaseUser.uid).collection('wordLists').add({
+          listTitle: toAdd.listTitle,
+          subject: toAdd.subject,
+          languageLevel: toAdd.languageLevel,
+          created: firebase.firestore.FieldValue.serverTimestamp(),
+          lastViewed: firebase.firestore.FieldValue.serverTimestamp(),
+          lastChanged: firebase.firestore.FieldValue.serverTimestamp(),
+          wordCount: 0
+        });
         
       }
 
