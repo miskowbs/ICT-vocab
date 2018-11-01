@@ -36,6 +36,8 @@
         v-show="showFab">
         <v-icon>add</v-icon>
     </v-btn>
+    <vocabListComponent
+      v-if="showVocabList" />
     <v-dialog
       v-model="newListShow"
     >
@@ -76,6 +78,7 @@
 
 <script>
 import { users } from "../firebase";
+import vocabListComponent from "./vocabListComponent";
 var firebase = require('firebase');
 
 export default {
@@ -89,7 +92,9 @@ export default {
       newList: {},
       vocabLists: [],
       showListInfo: [],
-      showFab: true
+      showFab: true,
+      showVocabList: false,
+      currentVocabList: []
     };
   },
   created() {
@@ -99,6 +104,9 @@ export default {
     return {
       vocabLists: users.doc(this.firebaseUser.uid).collection('wordLists')
     }
+  },
+  components: {
+    vocabListComponent
   },
   methods: {
     addList() {
@@ -125,6 +133,15 @@ export default {
     showList(clicked) {
       var showListInfo = this.showListInfo;
       this.showFab = false;
+      this.showVocabList = true;
+      
+      console.log(users.doc(this.firebaseUser.uid)
+                        .collection('wordLists')
+                        .doc(this.vocabLists[clicked].id)
+                        .collection('words').doc('ZlHcB0TYuqSnq7z8jSk1').get().then(function (res) { 
+        console.log(res.data()); //Example for getting a doc within a collection within a doc within a collection within a doc within a collection
+      }));
+
       console.log(clicked);
       if(showListInfo.length > 0) {//showListInfo is populated: a card has been clicked before
         for(var i = 0; i < showListInfo.length; i++){
@@ -138,6 +155,7 @@ export default {
     },
     showAllLists() {
       this.showFab = true;
+      this.showVOcabList = false;
       for(var i = 0; i < this.showListInfo.length; i++){
         this.showListInfo[i] = true;
       }
