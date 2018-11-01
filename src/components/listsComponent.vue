@@ -1,11 +1,12 @@
 <template>
   <v-container fluid grid-list-lg class="elevation-12 ma-0"> 
     <v-layout
-      v-for="list in vocabLists"
+      v-for="(list, index) in vocabLists"
       :key="list.id">
       <v-flex xs12>
             <v-card
-              @click.native="showFab = !showFab/* On click of card do stuff */">
+              @click.native="showList(index)/* On click of card do stuff */"
+              v-show="showListInfo.length == 0 ? true : showListInfo[index]">
                 <v-card-title primary-title>
                     <v-flex xs4>
                         <h3 class="headline mb-auto">{{ list.listTitle }}</h3>
@@ -120,6 +121,26 @@ export default {
 
       this.newListShow = false;
       this.newList = { };
+    },
+    showList(clicked) {
+      var showListInfo = this.showListInfo;
+      this.showFab = false;
+      console.log(clicked);
+      if(showListInfo.length > 0) {//showListInfo is populated: a card has been clicked before
+        for(var i = 0; i < showListInfo.length; i++){
+          i == clicked ? showListInfo[i] = true : showListInfo[i] = false;
+        }
+      } else {//showListInfo is not populated: a card hasn't been clicked before
+        for(var i = 0; i < this.vocabLists.length; i++){
+          i == clicked ? showListInfo.push(true) : showListInfo.push(false);
+        }
+      }
+    },
+    showAllLists() {
+      this.showFab = true;
+      for(var i = 0; i < this.showListInfo.length; i++){
+        this.showListInfo[i] = true;
+      }
     }
   }
 };
