@@ -2,9 +2,10 @@
   <v-container fluid grid-list-lg class="elevation-12 ma-0"> 
     <v-layout
       v-for="list in vocabLists"
-      :key="list['.key']">
+      :key="list.id">
       <v-flex xs12>
-            <v-card>
+            <v-card
+              @click.native="showFab = !showFab/* On click of card do stuff */">
                 <v-card-title primary-title>
                     <v-flex xs4>
                         <h3 class="headline mb-auto">{{ list.listTitle }}</h3>
@@ -22,41 +23,6 @@
             </v-card>
         </v-flex>
     </v-layout>
-    <v-dialog
-        v-model="newListShow"
-    >
-        <v-card>
-          <v-card-title>
-            <span class="headline">New List</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12>
-                  <v-text-field label="List Name*" v-model="newList.listTitle" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Subject" v-model="newList.subject"></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-select
-                    :items="['en', 'someJp', 'jp']"
-                    label="Language Level*"
-                    v-model="newList.languageLevel"
-                    required
-                  ></v-select>
-                </v-flex>
-              </v-layout>
-            </v-container>
-            <small>*indicates required field</small>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="newListShow = false">Close</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="addList()">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-    </v-dialog>
     <v-btn
         color="pink"
         dark
@@ -65,9 +31,45 @@
         top
         right
         fab
-        @click="newListShow = true">
+        @click="newListShow = true"
+        v-show="showFab">
         <v-icon>add</v-icon>
     </v-btn>
+    <v-dialog
+      v-model="newListShow"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">New List</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field label="List Name*" v-model="newList.listTitle" required></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field label="Subject" v-model="newList.subject"></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-select
+                  :items="['en', 'someJp', 'jp']"
+                  label="Language Level*"
+                  v-model="newList.languageLevel"
+                  required
+                ></v-select>
+              </v-flex>
+            </v-layout>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click.native="newListShow = false">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="addList()">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -84,8 +86,13 @@ export default {
     return {
       newListShow: false,
       newList: {},
-      vocabLists: []
+      vocabLists: [],
+      showListInfo: [],
+      showFab: true
     };
+  },
+  created() {
+    
   },
   firestore() {
     return {
