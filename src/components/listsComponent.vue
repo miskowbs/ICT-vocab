@@ -37,7 +37,9 @@
         <v-icon>add</v-icon>
     </v-btn>
     <vocabListComponent
-      v-if="showVocabList" />
+      v-if="showVocabList"
+      :listId="vocabListId"
+      :userId="firebaseUser.uid" />
     <v-dialog
       v-model="newListShow"
     >
@@ -94,7 +96,7 @@ export default {
       showListInfo: [],
       showFab: true,
       showVocabList: false,
-      currentVocabList: []
+      vocabListId: ""
     };
   },
   created() {
@@ -132,15 +134,8 @@ export default {
     },
     showList(clicked) {
       var showListInfo = this.showListInfo;
-      this.showFab = false;
-      this.showVocabList = true;
       
-      console.log(users.doc(this.firebaseUser.uid)
-                        .collection('wordLists')
-                        .doc(this.vocabLists[clicked].id)
-                        .collection('words').doc('ZlHcB0TYuqSnq7z8jSk1').get().then(function (res) { 
-        console.log(res.data()); //Example for getting a doc within a collection within a doc within a collection within a doc within a collection
-      }));
+      this.vocabListId = this.vocabLists[clicked].id;
 
       console.log(clicked);
       if(showListInfo.length > 0) {//showListInfo is populated: a card has been clicked before
@@ -152,6 +147,9 @@ export default {
           i == clicked ? showListInfo.push(true) : showListInfo.push(false);
         }
       }
+
+      this.showFab = false;
+      this.showVocabList = true;
     },
     showAllLists() {
       this.showFab = true;
