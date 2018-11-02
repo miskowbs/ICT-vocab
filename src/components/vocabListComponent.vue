@@ -48,7 +48,7 @@
                 <v-textarea
                   box
                   label="Definition*"
-                  no-resize
+                  auto-grow
                   v-model="newWord.def"
                 ></v-textarea>
               </v-flex>
@@ -59,7 +59,7 @@
                 <v-textarea
                   box
                   label="定義"
-                  no-resize
+                  auto-grow
                   v-model="newWord.jpDef"
                 ></v-textarea>
               </v-flex>
@@ -67,7 +67,7 @@
                 <v-textarea
                   box
                   label="memo"
-                  no-resize
+                  auto-grow
                   v-model="newWord.memo"
                 ></v-textarea>
               </v-flex>
@@ -75,7 +75,7 @@
                 <v-textarea
                   box
                   label="mnemonic"
-                  no-resize
+                  auto-grow
                   v-model="newWord.mnemo"
                 ></v-textarea>
               </v-flex>
@@ -140,6 +140,8 @@ import { users } from '../firebase';
     methods: {
       addWord() {
 
+        this.newWord = { }
+        this.newWordShow = false;
       }
     }
   }
