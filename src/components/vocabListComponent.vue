@@ -49,6 +49,7 @@
                   box
                   label="Definition*"
                   auto-grow
+                  required
                   v-model="newWord.def"
                 ></v-textarea>
               </v-flex>
@@ -104,6 +105,7 @@
 
 <script>
 import { users } from '../firebase';
+var firebase = require('firebase');
 
   export default { 
     props: {
@@ -139,6 +141,39 @@ import { users } from '../firebase';
     },
     methods: {
       addWord() {
+
+        if(this.newWord) {
+          console.log('adding List');
+          var toAdd = this.newWord;
+          var wordCount = this.words.length;
+          var userId = this.userId;
+          var listId = this.listId;
+          var words = this.words;
+
+          users.doc(userId)
+                .collection('wordLists')
+                .doc(listId)
+                .collection('words')
+                .add({
+            word: toAdd.word,
+            def: toAdd.def,
+            jpWord: toAdd.jpWord ? toAdd.jpWord : "",
+            jpDef: toAdd.jpDef ? toAdd.jpDef : "",
+            memo: toAdd.memo ? toAdd.memo : "",
+            mnemo: toAdd.mnemo ? toAdd.mnemo : "",
+            created: firebase.firestore.FieldValue.serverTimestamp(),
+            lastViewed: firebase.firestore.FieldValue.serverTimestamp(),
+            lastChanged: firebase.firestore.FieldValue.serverTimestamp()
+          }).then(function () {
+              users.doc(userId)
+                  .collection('wordLists')
+                  .doc(listId)
+                  .update({
+                    wordCount:  words.length,
+                    lastChanged: firebase.firestore.FieldValue.serverTimestamp()
+                  })
+          });
+        }
 
         this.newWord = { }
         this.newWordShow = false;

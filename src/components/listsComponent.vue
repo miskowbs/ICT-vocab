@@ -137,19 +137,23 @@ export default {
       
       this.vocabListId = this.vocabLists[clicked].id;
 
-      console.log(clicked);
-      if(showListInfo.length > 0) {//showListInfo is populated: a card has been clicked before
-        for(var i = 0; i < showListInfo.length; i++){
-          i == clicked ? showListInfo[i] = true : showListInfo[i] = false;
-        }
-      } else {//showListInfo is not populated: a card hasn't been clicked before
-        for(var i = 0; i < this.vocabLists.length; i++){
-          i == clicked ? showListInfo.push(true) : showListInfo.push(false);
-        }
-      }
+      users.doc(this.firebaseUser.uid).collection('wordLists').doc(this.vocabListId).update({
+          lastViewed: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          console.log(clicked);
+          if(showListInfo.length > 0) {//showListInfo is populated: a card has been clicked before
+            for(var i = 0; i < showListInfo.length; i++){
+              i == clicked ? showListInfo[i] = true : showListInfo[i] = false;
+            }
+          } else {//showListInfo is not populated: a card hasn't been clicked before
+            for(var i = 0; i < this.vocabLists.length; i++){
+              i == clicked ? showListInfo.push(true) : showListInfo.push(false);
+            }
+          }
 
-      this.showFab = false;
-      this.showVocabList = true;
+          this.showFab = false;
+          this.showVocabList = true;
+        });
     },
     showAllLists() {
       this.showFab = true;
