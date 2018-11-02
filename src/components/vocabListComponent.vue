@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid grid-list-lg class="elevation-6 ma-0"> 
-      <v-layout
+  <v-container fluid grid-list-lg class="elevation-6 ma-0"> 
+    <v-layout
       v-for="word in words"
       :key="word.id">
       <v-flex xs12>
@@ -27,10 +27,78 @@
         sticky
         top
         right
-        fab>
+        fab
+        @click="newWordShow = true">
         <v-icon>add</v-icon>
     </v-btn>
-    </v-container>
+    <v-dialog
+      v-model="newWordShow"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">New Word</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12 md4>
+                <v-text-field label="Word*" v-model="newWord.word" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 md8>
+                <v-textarea
+                  box
+                  label="Definition*"
+                  no-resize
+                  v-model="newWord.def"
+                ></v-textarea>
+              </v-flex>
+              <v-flex xs12 md4>
+                <v-text-field label="言葉" v-model="newWord.jpWord"></v-text-field>
+              </v-flex>
+              <v-flex xs12 md8>
+                <v-textarea
+                  box
+                  label="定義"
+                  no-resize
+                  v-model="newWord.jpDef"
+                ></v-textarea>
+              </v-flex>
+              <v-flex xs12 md6>
+                <v-textarea
+                  box
+                  label="memo"
+                  no-resize
+                  v-model="newWord.memo"
+                ></v-textarea>
+              </v-flex>
+              <v-flex xs12 md6>
+                <v-textarea
+                  box
+                  label="mnemonic"
+                  no-resize
+                  v-model="newWord.mnemo"
+                ></v-textarea>
+              </v-flex>
+              <v-flex xs12 md6>
+                <v-select
+                  :items="['en', 'someJp', 'jp']"
+                  label="Language Level*"
+                  v-model="newWord.languageLevel"
+                  required
+                ></v-select>
+              </v-flex>
+            </v-layout>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click.native="newWordShow = false">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="addWord()">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
 
@@ -51,7 +119,9 @@ import { users } from '../firebase';
     data() {
       return {
         words: [],
-        list: {}
+        list: {},
+        newWordShow: false,
+        newWord: { }
       }
     },
     firestore() {
@@ -65,6 +135,11 @@ import { users } from '../firebase';
         list: users.doc(userId)
                     .collection('wordLists')
                     .doc(listId)
+      }
+    },
+    methods: {
+      addWord() {
+
       }
     }
   }
