@@ -7,18 +7,78 @@
       <v-expansion-panel-content
         v-for="(word, index) in words"
         :key="index">
-        <v-layout
-          slot="header">
-            <v-flex xs8>
-              <h3 class="headline mb-auto">{{ word.word }}</h3>
-            </v-flex>
-            <v-flex xs4>
-              <h4 class="mb-auto" >Last Viewed: {{ word.lastViewed.toDate().toLocaleDateString('ja-JP') }}</h4>
-              <h4 class="mb-auto" v-show="showWordDetails[index]">Last Changed: {{ word.lastChanged.toDate().toLocaleDateString('ja-JP') }}</h4>
-            </v-flex>
+        <v-layout slot="header">
+          <v-flex xs8>
+            <v-layout>
+              <v-flex 
+                xs5
+                class="display-1 mb-auto text-capitalize">
+                {{ word.word }}
+              </v-flex>
+              <v-flex
+                xs3
+                class="headline mb-auto"
+                v-if="word.languageLevel != 'en'"
+                v-show="showWordDetails[index]">
+                {{ word.jpWord }}
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex xs4>
+            <h4 class="title mb-auto" >
+              Last Viewed: {{ word.lastViewed.toDate().toLocaleDateString('ja-JP') }}
+            </h4>
+            <h4 
+              class="body-1 mb-auto" 
+              v-show="showWordDetails[index]">
+              Last Changed: {{ word.lastChanged.toDate().toLocaleDateString('ja-JP') }}
+            </h4>
+            <h4 
+              class="body-1 mb-auto" 
+              v-show="showWordDetails[index]">
+              Created: {{ word.created.toDate().toLocaleDateString('ja-JP') }}
+            </h4>
+            <h4 
+              class="body-1 mb-auto" 
+              v-show="showWordDetails[index]">
+              LanguageLevel: {{ word.languageLevel }}
+            </h4>
+          </v-flex>
         </v-layout>
         <v-card>
-            <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+          <v-card-text>
+            <v-layout
+              row
+              wrap>
+              <v-flex xs12>
+                <v-layout
+                  row
+                  wrap>
+                  <v-flex 
+                    xs12
+                    md6
+                    class="headline">
+                    <strong>Definition:</strong> {{ word.def }} 
+                  </v-flex>
+                  <v-flex
+                    xs12
+                    md6
+                    class="headline"
+                    v-if="word.languageLevel == 'jp'">
+                    <strong>定義:</strong> {{ word.jpDef }}
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+              <v-flex xs12 md6>
+                Memo: {{ word.memo }}
+              </v-flex>
+              <v-flex xs12 md6>
+                Mnemonic: {{ word.mnemo }}
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+          <v-card-actions>
+          </v-card-actions>
         </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -163,6 +223,7 @@ var firebase = require('firebase');
             jpDef: toAdd.jpDef ? toAdd.jpDef : "",
             memo: toAdd.memo ? toAdd.memo : "",
             mnemo: toAdd.mnemo ? toAdd.mnemo : "",
+            languageLevel: toAdd.languageLevel,
             created: firebase.firestore.FieldValue.serverTimestamp(),
             lastViewed: firebase.firestore.FieldValue.serverTimestamp(),
             lastChanged: firebase.firestore.FieldValue.serverTimestamp()
@@ -181,26 +242,6 @@ var firebase = require('firebase');
         this.newWordShow = false;
         this.showWordDetails = [ ];
       },
-      toggleWordDetails(index) {
-        
-        var wordsList = this.words;
-        var showWordDetails = this.showWordDetails;
-        if(showWordDetails.length != wordsList.length) {/*No details have been seen yet OR
-                                                          a new list has been created, hiding
-                                                          all details*/
-          for(var i = 0; i < wordsList.length; i++) {
-            if(i == index) {
-              showWordDetails.push(true);
-            } else {
-              showWordDetails.push(false);
-            }
-          }
-          console.log('populated showWordDetails, showWordDetails[' + index + '] set to true');
-        } else { //Toggle the showWordDetails of that word
-          showWordDetails[index] = !showWordDetails[index];
-          console.log('toggled showWordDetails[' + index + '] to ' + showWordDetails[index]);
-        }
-      }
     }
   }
 </script>
