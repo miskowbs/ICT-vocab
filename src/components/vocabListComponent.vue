@@ -1,12 +1,12 @@
 <template>
   <v-container fluid grid-list-lg class="elevation-6 ma-0"> 
     <v-layout
-      v-for="word in words"
+      v-for="(word, index) in words"
       :key="word.id">
       <v-flex xs12>
             <v-card
-              @click.native="/*showList(index) On click of card do stuff */">
-              <!-- v-show="showListInfo.length == 0 ? true : showListInfo[index]"> -->
+              @click.native="toggleWordDetails(index)">
+              <!-- v-if="showWordDetails.length == 0 ? false : showWordDetails[index]"> -->
                 <v-card-title primary-title>
                     <v-flex xs6>
                         <h3 class="headline mb-auto">{{ word.word }}</h3>
@@ -127,7 +127,8 @@ var firebase = require('firebase');
         words: [],
         list: {},
         newWordShow: false,
-        newWord: { }
+        newWord: { },
+        showWordDetails: []
       }
     },
     firestore() {
@@ -177,8 +178,29 @@ var firebase = require('firebase');
           });
         }
 
-        this.newWord = { }
+        this.newWord = { };
         this.newWordShow = false;
+        this.showWordDetails = [ ];
+      },
+      toggleWordDetails(index) {
+        
+        var wordsList = this.words;
+        var showWordDetails = this.showWordDetails;
+        if(showWordDetails.length != wordsList.length) {/*No details have been seen yet OR
+                                                          a new list has been created, hiding
+                                                          all details*/
+          for(var i = 0; i < wordsList.length; i++) {
+            if(i == index) {
+              showWordDetails.push(true);
+            } else {
+              showWordDetails.push(false);
+            }
+          }
+          console.log('populated showWordDetails, showWordDetails[' + index + '] set to true');
+        } else { //Toggle the showWordDetails of that word
+          showWordDetails[index] = !showWordDetails[index];
+          console.log('toggled showWordDetails[' + index + '] to ' + showWordDetails[index]);
+        }
       }
     }
   }
