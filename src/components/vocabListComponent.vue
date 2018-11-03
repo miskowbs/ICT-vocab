@@ -172,93 +172,93 @@
 import { users } from '../firebase';
 var firebase = require('firebase');
 
-  export default { 
-    props: {
-      listId: {
-        type: String,
-        required: true
-      },
-      userId: {
-        type: String,
-        required: true
-      }
+export default { 
+  props: {
+    listId: {
+      type: String,
+      required: true
     },
-    data() {
-      return {
-        words: [],
-        list: {},
-        newWordShow: false,
-        newWord: { },
-        showWordDetails: []
-      }
-    },
-    firestore() {
-      const listId = this.$props.listId;
-      const userId = this.$props.userId;
-      return {
-        words: users.doc(userId)
-                    .collection('wordLists')
-                    .doc(listId)
-                    .collection('words'),
-        list: users.doc(userId)
-                    .collection('wordLists')
-                    .doc(listId)
-      }
-    },
-    methods: {
-      addWord() {
-
-        if(this.newWord) {
-          var toAdd = this.newWord;
-          var userId = this.userId;
-          var listId = this.listId;
-          var words = this.words;
-
-          users.doc(userId)
-                .collection('wordLists')
-                .doc(listId)
-                .collection('words')
-                .add({
-            word: toAdd.word,
-            def: toAdd.def,
-            jpWord: toAdd.jpWord ? toAdd.jpWord : "",
-            jpDef: toAdd.jpDef ? toAdd.jpDef : "",
-            memo: toAdd.memo ? toAdd.memo : "",
-            mnemo: toAdd.mnemo ? toAdd.mnemo : "",
-            languageLevel: toAdd.languageLevel,
-            created: firebase.firestore.Timestamp.fromDate(new Date()),
-            lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
-            lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
-          }).then(function () {
-              users.doc(userId)
+    userId: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      words: [],
+      list: {},
+      newWordShow: false,
+      newWord: { },
+      showWordDetails: []
+    }
+  },
+  firestore() {
+    const listId = this.$props.listId;
+    const userId = this.$props.userId;
+    return {
+      words: users.doc(userId)
                   .collection('wordLists')
                   .doc(listId)
-                  .update({
-                    wordCount:  words.length,
-                    lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
-                  })
-          });
-        }
+                  .collection('words'),
+      list: users.doc(userId)
+                  .collection('wordLists')
+                  .doc(listId)
+    }
+  },
+  methods: {
+    addWord() {
 
-        this.newWord = { };
-        this.newWordShow = false;
-        this.showWordDetails = [ ];
-      },
-      viewItem(index) {
-        if(!this.showWordDetails[index]){
-          var userId = this.userId;
-          var listId = this.listId;
-          var words = this.words;
-          users.doc(userId)
+      if(this.newWord) {
+        var toAdd = this.newWord;
+        var userId = this.userId;
+        var listId = this.listId;
+        var words = this.words;
+
+        users.doc(userId)
+              .collection('wordLists')
+              .doc(listId)
+              .collection('words')
+              .add({
+          word: toAdd.word,
+          def: toAdd.def,
+          jpWord: toAdd.jpWord ? toAdd.jpWord : "",
+          jpDef: toAdd.jpDef ? toAdd.jpDef : "",
+          memo: toAdd.memo ? toAdd.memo : "",
+          mnemo: toAdd.mnemo ? toAdd.mnemo : "",
+          languageLevel: toAdd.languageLevel,
+          created: firebase.firestore.Timestamp.fromDate(new Date()),
+          lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
+          lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
+        }).then(function () {
+            users.doc(userId)
                 .collection('wordLists')
                 .doc(listId)
-                .collection('words')
-                .doc(words[index].id)
                 .update({
-                  lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
-                });
-        }
+                  wordCount:  words.length,
+                  lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
+                })
+        });
+      }
+
+      this.newWord = { };
+      this.newWordShow = false;
+      this.showWordDetails = [ ];
+    },
+    viewItem(index) {
+      if(!this.showWordDetails[index]){
+        var userId = this.userId;
+        var listId = this.listId;
+        var words = this.words;
+        users.doc(userId)
+              .collection('wordLists')
+              .doc(listId)
+              .collection('words')
+              .doc(words[index].id)
+              .update({
+                lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
+              });
       }
     }
   }
+}
 </script>
