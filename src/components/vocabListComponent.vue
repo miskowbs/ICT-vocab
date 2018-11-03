@@ -11,12 +11,17 @@
                     <v-flex xs4>
                         <h3 class="headline mb-auto">{{ word.word }}</h3>
                     </v-flex>
-                    <v-spacer/>
                     <v-flex xs4>
                         <h4 class="mb-auto">Last Viewed: {{ word.lastViewed.toDate().toLocaleDateString('ja-JP') }} </h4>
                         <h4 class="mb-auto">Last Changed: {{ word.lastChanged.toDate().toLocaleDateString('ja-JP') }} </h4>
                     </v-flex>
+                    <v-spacer/>
+                    <v-flex xs2>
+                      <v-icon right>keyboard_arrow_down</v-icon>
+                    </v-flex>
                 </v-card-title>
+                <v-card-actions>
+                </v-card-actions>
             </v-card>
         </v-flex>
     </v-layout>
@@ -143,9 +148,7 @@ var firebase = require('firebase');
       addWord() {
 
         if(this.newWord) {
-          console.log('adding List');
           var toAdd = this.newWord;
-          var wordCount = this.words.length;
           var userId = this.userId;
           var listId = this.listId;
           var words = this.words;
