@@ -121,9 +121,9 @@ export default {
           listTitle: toAdd.listTitle,
           subject: toAdd.subject,
           languageLevel: toAdd.languageLevel,
-          created: firebase.firestore.FieldValue.serverTimestamp(),
-          lastViewed: firebase.firestore.FieldValue.serverTimestamp(),
-          lastChanged: firebase.firestore.FieldValue.serverTimestamp(),
+          created: firebase.firestore.Timestamp.fromDate(new Date()),
+          lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
+          lastChanged: firebase.firestore.Timestamp.fromDate(new Date()),
           wordCount: 0
         });
         
@@ -157,7 +157,7 @@ export default {
       }
 
       users.doc(this.firebaseUser.uid).collection('wordLists').doc(this.vocabListId).update({
-          lastViewed: firebase.firestore.FieldValue.serverTimestamp()
+          lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
         });
 
       this.showFab = false;

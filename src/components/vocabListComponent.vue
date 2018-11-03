@@ -7,7 +7,9 @@
       <v-expansion-panel-content
         v-for="(word, index) in words"
         :key="index">
-        <v-layout slot="header">
+        <v-layout 
+          slot="header"
+          @click="viewItem(index)">
           <v-flex xs8>
             <v-layout>
               <v-flex 
@@ -224,16 +226,16 @@ var firebase = require('firebase');
             memo: toAdd.memo ? toAdd.memo : "",
             mnemo: toAdd.mnemo ? toAdd.mnemo : "",
             languageLevel: toAdd.languageLevel,
-            created: firebase.firestore.FieldValue.serverTimestamp(),
-            lastViewed: firebase.firestore.FieldValue.serverTimestamp(),
-            lastChanged: firebase.firestore.FieldValue.serverTimestamp()
+            created: firebase.firestore.Timestamp.fromDate(new Date()),
+            lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
+            lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
           }).then(function () {
               users.doc(userId)
                   .collection('wordLists')
                   .doc(listId)
                   .update({
                     wordCount:  words.length,
-                    lastChanged: firebase.firestore.FieldValue.serverTimestamp()
+                    lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
                   })
           });
         }
@@ -242,6 +244,21 @@ var firebase = require('firebase');
         this.newWordShow = false;
         this.showWordDetails = [ ];
       },
+      viewItem(index) {
+        if(!this.showWordDetails[index]){
+          var userId = this.userId;
+          var listId = this.listId;
+          var words = this.words;
+          users.doc(userId)
+                .collection('wordLists')
+                .doc(listId)
+                .collection('words')
+                .doc(words[index].id)
+                .update({
+                  lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
+                });
+        }
+      }
     }
   }
 </script>
