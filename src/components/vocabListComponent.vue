@@ -8,15 +8,14 @@
               @click.native="/*showList(index) On click of card do stuff */">
               <!-- v-show="showListInfo.length == 0 ? true : showListInfo[index]"> -->
                 <v-card-title primary-title>
-                    <v-flex xs4>
+                    <v-flex xs6>
                         <h3 class="headline mb-auto">{{ word.word }}</h3>
                     </v-flex>
-                    <v-flex xs4>
+                    <v-flex xs5>
                         <h4 class="mb-auto">Last Viewed: {{ word.lastViewed.toDate().toLocaleDateString('ja-JP') }} </h4>
                         <h4 class="mb-auto">Last Changed: {{ word.lastChanged.toDate().toLocaleDateString('ja-JP') }} </h4>
                     </v-flex>
-                    <v-spacer/>
-                    <v-flex xs2>
+                    <v-flex xs1>
                       <v-icon right>keyboard_arrow_down</v-icon>
                     </v-flex>
                 </v-card-title>
