@@ -138,7 +138,7 @@ export default {
       this.vocabListId = this.vocabLists[clicked].id;
 
       console.log(clicked);
-      /*
+      /* TODO:
       Possible Issue: 
         - User Clicks a card
         - Goes back to all vocabLists
@@ -165,7 +165,7 @@ export default {
     },
     showAllLists() {
       this.showFab = true;
-      this.showVOcabList = false;
+      this.showVocabList = false;
       for(var i = 0; i < this.showListInfo.length; i++){
         this.showListInfo[i] = true;
       }

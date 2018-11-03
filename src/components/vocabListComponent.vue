@@ -1,29 +1,28 @@
 <template>
   <v-container fluid grid-list-lg class="elevation-6 ma-0"> 
-    <v-layout
-      v-for="(word, index) in words"
-      :key="word.id">
-      <v-flex xs12>
-            <v-card
-              @click.native="toggleWordDetails(index)">
-              <!-- v-if="showWordDetails.length == 0 ? false : showWordDetails[index]"> -->
-                <v-card-title primary-title>
-                    <v-flex xs6>
-                        <h3 class="headline mb-auto">{{ word.word }}</h3>
-                    </v-flex>
-                    <v-flex xs5>
-                        <h4 class="mb-auto">Last Viewed: {{ word.lastViewed.toDate().toLocaleDateString('ja-JP') }} </h4>
-                        <h4 class="mb-auto">Last Changed: {{ word.lastChanged.toDate().toLocaleDateString('ja-JP') }} </h4>
-                    </v-flex>
-                    <v-flex xs1>
-                      <v-icon right>keyboard_arrow_down</v-icon>
-                    </v-flex>
-                </v-card-title>
-                <v-card-actions>
-                </v-card-actions>
-            </v-card>
-        </v-flex>
-    </v-layout>
+    <v-expansion-panel
+      v-model="showWordDetails"
+      expand
+      popout>
+      <v-expansion-panel-content
+        v-for="(word, index) in words"
+        :key="index">
+        <v-layout
+          slot="header">
+            <v-flex xs8>
+              <h3 class="headline mb-auto">{{ word.word }}</h3>
+            </v-flex>
+            <v-flex xs4>
+              <h4 class="mb-auto" >Last Viewed: {{ word.lastViewed.toDate().toLocaleDateString('ja-JP') }}</h4>
+              <h4 class="mb-auto" v-show="showWordDetails[index]">Last Changed: {{ word.lastChanged.toDate().toLocaleDateString('ja-JP') }}</h4>
+            </v-flex>
+        </v-layout>
+        <v-card>
+            <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+     
     <v-btn
         color="blue"
         dark
