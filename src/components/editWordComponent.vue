@@ -62,8 +62,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="wordShow = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="addWord()">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="$emit('closeDialog');">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="word.id ? updateWord() : addWord()">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -77,6 +77,8 @@ export default {
   
   props: {
     word: {
+    },
+    wordCount: {
     },
     listId: {
       type: String,
@@ -93,8 +95,12 @@ export default {
   },
   data() {
     return {
-      fbWord: { },
-      titleText: ""
+      fbWord: { }
+    }
+  },
+  computed: {
+    titleText: function() {
+        return this.word.id ? this.word.word : 'New Word' 
     }
   },
   firebase() {
@@ -116,7 +122,8 @@ export default {
         var toAdd = this.word;
         var userId = this.userId;
         var listId = this.listId;
-        var words = this.words; //TODO: figure out how to deal with updating wordCount
+        var wordCount = this.wordCount;
+        var vm = this;
 
         users.doc(userId)
               .collection('wordLists')
@@ -134,17 +141,41 @@ export default {
           lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
         }).then(function () {
-            users.doc(userId)
-                .collection('wordLists')
-                .doc(listId)
-                .update({
-                  wordCount:  words.length,
-                  lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
-                })
+          console.log(vm)
+          vm.$emit('updateParent');
+          vm.$emit('closeDialog');
         });
       }
+      
+    },
+    updateWord() {
+      if(this.word) {
+        var toUpdate = this.word;
+        var userId = this.userId;
+        var listId = this.listId;
+        var wordCount = this.wordCount;
 
-      this.wordShow = false;
+        users.doc(userId)
+              .collection('wordLists')
+              .doc(listId)
+              .collection('words')
+              .doc(this.word.id)
+              .update({
+          word: toUpdate.word,
+          def: toUpdate.def,
+          jpWord: toUpdate.jpWord ? toUpdate.jpWord : "",
+          jpDef: toUpdate.jpDef ? toUpdate.jpDef : "",
+          memo: toUpdate.memo ? toUpdate.memo : "",
+          mnemo: toUpdate.mnemo ? toUpdate.mnemo : "",
+          languageLevel: toUpdate.languageLevel,
+          created: firebase.firestore.Timestamp.fromDate(new Date()),
+          lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
+          lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
+        }).then(function () {
+            vm.$emit('updateParent');
+            vm.$emit('closeDialog');
+        });
+      }
     }
   }
 
