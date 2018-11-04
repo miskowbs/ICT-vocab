@@ -86,7 +86,9 @@
               <v-icon>notes</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn icon>
+            <v-btn 
+              icon
+              @click="deleteWord(index)">
               <v-icon>delete</v-icon>
             </v-btn>
           </v-card-actions>
@@ -185,6 +187,26 @@ export default {
                 lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
               });
       }
+    },
+    deleteWord(index) {
+      var userId = this.userId;
+      var listId = this.listId;
+      var idToDelete = this.words[index].id;
+      var vm = this;
+
+      vm.showWordDetails[index] = false;
+      for(var i = index; i < vm.showWordDetails.length; i++) {
+        vm.showWordDetails[i] = vm.showWordDetails[i+1];
+      }
+      users.doc(userId)
+            .collection('wordLists')
+            .doc(listId)
+            .collection('words')
+            .doc(idToDelete)
+            .delete()
+            .then(() => {
+              vm.updateCount();
+            })
     },
     updateCount() {
       var userId = this.userId;
