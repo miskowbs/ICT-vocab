@@ -93,27 +93,9 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      fbWord: { }
-    }
-  },
   computed: {
     titleText: function() {
         return this.word.id ? this.word.word : 'New Word' 
-    }
-  },
-  firebase() {
-    const listId = this.$props.listId;
-    const userId = this.$props.userId;
-    const wordId = this.$props.word.id;
-     
-    return {
-      fbWord: users.doc(userId)
-              .collection('wordLists')
-              .doc(listId)
-              .collection('words')
-              .doc(wordId)
     }
   },
   methods: {
@@ -141,7 +123,6 @@ export default {
           lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
         }).then(function () {
-          console.log(vm)
           vm.$emit('updateParent');
           vm.$emit('closeDialog');
         });
@@ -154,6 +135,7 @@ export default {
         var userId = this.userId;
         var listId = this.listId;
         var wordCount = this.wordCount;
+        var vm = this;
 
         users.doc(userId)
               .collection('wordLists')
@@ -168,8 +150,6 @@ export default {
           memo: toUpdate.memo ? toUpdate.memo : "",
           mnemo: toUpdate.mnemo ? toUpdate.mnemo : "",
           languageLevel: toUpdate.languageLevel,
-          created: firebase.firestore.Timestamp.fromDate(new Date()),
-          lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
         }).then(function () {
             vm.$emit('updateParent');

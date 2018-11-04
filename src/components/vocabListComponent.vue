@@ -80,6 +80,15 @@
             </v-layout>
           </v-card-text>
           <v-card-actions>
+            <v-btn 
+              icon
+              @click="wordDialog(word)">
+              <v-icon>notes</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn icon>
+              <v-icon>delete</v-icon>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-expansion-panel-content>
@@ -98,7 +107,7 @@
     </v-btn>
     <editWordComponent 
       v-if="wordShow"
-      v-on:closeDialog="wordDialog()"
+      v-on:closeDialog="closeDialog()"
       v-on:updateParent="updateCount()"
       :word="word"
       :wordCount="words.length"
@@ -153,6 +162,14 @@ export default {
   methods: {
     wordDialog() {
       this.wordShow = !this.wordShow;
+    },
+    wordDialog(editWord) {
+      this.word = editWord;
+      this.wordShow = !this.wordShow;
+    },
+    closeDialog() {
+      this.wordDialog();
+      this.word = { };
     },
     viewItem(index) {
       if(!this.showWordDetails[index]){
