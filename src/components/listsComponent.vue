@@ -1,28 +1,46 @@
 <template>
   <v-container fluid grid-list-lg class="elevation-12 ma-0"> 
     <v-layout
-      v-for="(list, index) in vocabLists"
-      :key="list.id">
+      wrap>
+      <v-spacer></v-spacer>
+      <v-flex 
+        xs4
+        >
+        <v-select
+          :items="['List Title', 'Last Seen', 'Last Updated']"
+          v-model="sortEnum"
+          menu-props="auto"
+          label="Sort By"
+          hide-details
+          v-show="showListInfo.length == 0 ? true : showSortBy">
+        </v-select>
+      </v-flex>
       <v-flex xs12>
-            <v-card
-              @click.native="showList(index)/* On click of card do stuff */"
-              v-show="showListInfo.length == 0 ? true : showListInfo[index]">
-                <v-card-title primary-title>
-                    <v-flex xs4>
-                        <h3 class="headline mb-auto">{{ list.listTitle }}</h3>
-                        <h4 class="mb-auto">{{ list.subject }}</h4>
-                    </v-flex>
-                    <v-spacer/>
-                    <v-flex xs4>
-                        <h4 class="mb-auto">Last Viewed: {{ list.lastViewed.toDate().toLocaleDateString('ja-JP') }} </h4>
-                        <h4 class="mb-auto">Last Changed: {{ list.lastChanged.toDate().toLocaleDateString('ja-JP') }} </h4>
-                    </v-flex>
-                    <v-flex xs2>
-                        <h3>Words: {{ list.wordCount }} </h3>
-                    </v-flex>
-                </v-card-title>
-            </v-card>
-        </v-flex>
+        <v-layout
+          v-for="(list, index) in vocabLists"
+          :key="list.id">
+          <v-flex xs12>
+                <v-card
+                  @click.native="showList(index)/* On click of card do stuff */"
+                  v-show="showListInfo.length == 0 ? true : showListInfo[index]">
+                    <v-card-title primary-title>
+                        <v-flex xs4>
+                            <h3 class="headline mb-auto text-capitalize">{{ list.listTitle }}</h3>
+                            <h4 class="mb-auto">{{ list.subject }}</h4>
+                        </v-flex>
+                        <v-spacer/>
+                        <v-flex xs4>
+                            <h4 class="mb-auto">Last Viewed: {{ list.lastViewed.toDate().toLocaleDateString('ja-JP') }} </h4>
+                            <h4 class="mb-auto">Last Changed: {{ list.lastChanged.toDate().toLocaleDateString('ja-JP') }} </h4>
+                        </v-flex>
+                        <v-flex xs2>
+                            <h3>Words: {{ list.wordCount }} </h3>
+                        </v-flex>
+                    </v-card-title>
+                </v-card>
+            </v-flex>
+        </v-layout>
+      </v-flex>
     </v-layout>
     <v-btn
         color="pink"
@@ -94,19 +112,46 @@ export default {
     return {
       newListShow: false,
       newList: {},
-      vocabLists: [],
+      vocabListsByTitle: [],
+      vocabListsByEdit: [],
+      vocabListsByViewed: [],
       showListInfo: [],
+      sortEnum: 'List Title',
       showFab: true,
       showVocabList: false,
       vocabListId: ""
     };
   },
-  created() {
-    
+  computed: {
+    showSortBy() {
+      for(var i = 0; i < this.showListInfo.length; i++) {
+        if(!this.showListInfo[i]) {
+          return false;
+        }
+      }
+      return true;
+    },
+    vocabLists() {
+      if(this.sortEnum === "List Title") {
+        return this.vocabListsByTitle;
+      }else if(this.sortEnum === "Last Seen") {
+        return this.vocabListsByViewed;
+      }else if(this.sortEnum === "Last Updated") {
+        return this.vocabListsByEdit;
+      }
+    }
   },
   firestore() {
     return {
-      vocabLists: users.doc(this.firebaseUser.uid).collection('wordLists')
+      vocabListsByTitle: users.doc(this.firebaseUser.uid)
+                              .collection('wordLists')
+                              .orderBy('listTitle'),
+      vocabListsByEdit: users.doc(this.firebaseUser.uid)
+                              .collection('wordLists')
+                              .orderBy('lastChanged'),
+      vocabListsByViewed: users.doc(this.firebaseUser.uid)
+                              .collection('wordLists')
+                              .orderBy('lastViewed')
     }
   },
   components: {
@@ -118,7 +163,7 @@ export default {
       if(this.newList) {
         var toAdd = this.newList;
         users.doc(this.firebaseUser.uid).collection('wordLists').add({
-          listTitle: toAdd.listTitle,
+          listTitle: toAdd.listTitle.to,
           subject: toAdd.subject,
           languageLevel: toAdd.languageLevel,
           created: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -160,9 +205,7 @@ export default {
     showAllLists() {
       this.showFab = true;
       this.showVocabList = false;
-      for(var i = 0; i < this.showListInfo.length; i++){
-        this.showListInfo[i] = true;
-      }
+      this.showListInfo = [ ];
     },
     deleteList(listId) {
       users.doc(this.firebaseUser.uid)
@@ -171,7 +214,6 @@ export default {
             .delete();
 
       this.showAllLists();
-      this.showListInfo.pop(); //pop the last element of a list to make sure that lengths are the same
     }
   }
 };

@@ -16,7 +16,7 @@
           menu-props="auto"
           label="Sort By"
           hide-details
-          @change="updateSort()">
+          @change="showWordDetails = [ ]">
         </v-select>
       </v-flex>
       <v-spacer></v-spacer>
@@ -124,7 +124,7 @@
         </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
-     
+    
     <v-btn
         color="blue"
         dark
@@ -169,7 +169,7 @@ export default {
     return {
       wordsByAlpha: [],
       wordsByDate: [],
-      sortEnum: "Date Added",
+      sortEnum: "Alphabetical",
       wordShow: false,
       word: { },
       showWordDetails: []
@@ -267,16 +267,6 @@ export default {
     },
     deleteList() {
       this.$emit('deleteList', this.listId);
-    },
-    updateSort() {
-      var listSort = this.$data.listSort[this.$data.sortEnum];
-      var userId = this.userId;
-      var listId = this.listId;
-      
-      this.words = users.doc(userId)
-                                    .collection('wordLists')
-                                    .doc(listId)
-                                    .collection('words').orderBy(listSort);
     }
   }
 }
