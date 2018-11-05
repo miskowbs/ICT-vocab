@@ -39,7 +39,9 @@
     <vocabListComponent
       v-if="showVocabList"
       :listId="vocabListId"
-      :userId="firebaseUser.uid" />
+      :userId="firebaseUser.uid"
+      v-on:closeList="showAllLists()"
+      v-on:deleteList="deleteList" />
     <v-dialog
       v-model="newListShow"
     >
@@ -112,10 +114,8 @@ export default {
   },
   methods: {
     addList() {
-      console.log('Uid ' + this.firebaseUser.uid); //<-- This is the User UID stored in Firebase auth
 
       if(this.newList) {
-        console.log('adding List');
         var toAdd = this.newList;
         users.doc(this.firebaseUser.uid).collection('wordLists').add({
           listTitle: toAdd.listTitle,
@@ -137,7 +137,6 @@ export default {
       
       this.vocabListId = this.vocabLists[clicked].id;
 
-      console.log(clicked);
       /* TODO:
       Possible Issue: 
         - User Clicks a card
@@ -169,6 +168,14 @@ export default {
       for(var i = 0; i < this.showListInfo.length; i++){
         this.showListInfo[i] = true;
       }
+    },
+    deleteList(listId) {
+      users.doc(this.firebaseUser.uid)
+            .collection('wordLists')
+            .doc(listId)
+            .delete();
+
+      this.showAllLists();
     }
   }
 };

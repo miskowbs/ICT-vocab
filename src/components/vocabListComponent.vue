@@ -1,5 +1,20 @@
 <template>
   <v-container fluid grid-list-lg class="elevation-6 ma-0"> 
+    <v-layout>
+      <v-btn 
+        color="blue" 
+        dark
+        @click="closeList()">Close
+        <v-icon dark right>close</v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn 
+        color="red" 
+        dark
+        @click="deleteList()">Delete List
+        <v-icon dark right>delete</v-icon>
+      </v-btn>
+    </v-layout>
     <v-expansion-panel
       v-model="showWordDetails"
       expand
@@ -219,6 +234,13 @@ export default {
                   wordCount:  words.length,
                   lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
                 })
+    },
+    closeList() {
+      this.showWordDetails = [];
+      this.$emit('closeList');
+    },
+    deleteList() {
+      this.$emit('deleteList', this.listId);
     }
   }
 }

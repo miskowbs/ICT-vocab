@@ -62,7 +62,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="$emit('closeDialog');">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="$emit('closeDialog')">Close</v-btn>
           <v-btn color="blue darken-1" flat @click.native="word.id ? updateWord() : addWord()">Save</v-btn>
         </v-card-actions>
       </v-card>
