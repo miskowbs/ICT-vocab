@@ -127,6 +127,9 @@ export default {
           wordCount: 0
         });
         
+        if(this.showListInfo.length > 0) {
+          this.showListInfo.push(true);
+        }
       }
 
       this.newListShow = false;
@@ -137,7 +140,7 @@ export default {
       
       this.vocabListId = this.vocabLists[clicked].id;
 
-      /* TODO:
+      /* DONE:
       Possible Issue: 
         - User Clicks a card
         - Goes back to all vocabLists
@@ -176,6 +179,7 @@ export default {
             .delete();
 
       this.showAllLists();
+      this.showListInfo.pop(); //pop the last element of a list to make sure that lengths are the same
     }
   }
 };

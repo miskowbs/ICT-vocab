@@ -77,6 +77,19 @@ export default {
   
   props: {
     word: {
+      type: Object,
+
+      default: () => {
+        return {
+          word: "",
+          def: "",
+          jpWord: "",
+          jpDef: "",
+          memo: "",
+          mnemo: "",
+          languageLevel: ""
+        }
+      }
     },
     wordCount: {
     },
@@ -95,7 +108,7 @@ export default {
   },
   computed: {
     titleText: function() {
-        return this.word.id ? this.word.word : 'New Word' 
+      return this.word.id ? this.word.word : 'New Word' 
     }
   },
   methods: {
