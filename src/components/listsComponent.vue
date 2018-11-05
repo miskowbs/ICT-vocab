@@ -163,7 +163,7 @@ export default {
       if(this.newList) {
         var toAdd = this.newList;
         users.doc(this.firebaseUser.uid).collection('wordLists').add({
-          listTitle: toAdd.listTitle.to,
+          listTitle: toAdd.listTitle.toLowerCase(),
           subject: toAdd.subject,
           languageLevel: toAdd.languageLevel,
           created: firebase.firestore.Timestamp.fromDate(new Date()),
