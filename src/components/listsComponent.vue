@@ -140,14 +140,6 @@ export default {
       
       this.vocabListId = this.vocabLists[clicked].id;
 
-      /* DONE:
-      Possible Issue: 
-        - User Clicks a card
-        - Goes back to all vocabLists
-        - Creates new list
-        - Clicks on that list details
-        - error because that lists showListsInfo[index] does not exist
-      */
       if(showListInfo.length > 0) {//showListInfo is populated: a card has been clicked before
         for(var i = 0; i < showListInfo.length; i++){
           i == clicked ? showListInfo[i] = true : showListInfo[i] = false;
