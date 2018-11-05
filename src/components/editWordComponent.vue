@@ -125,7 +125,7 @@ export default {
               .doc(listId)
               .collection('words')
               .add({
-          word: toAdd.word,
+          word: toAdd.word.toLowerCase(),
           def: toAdd.def,
           jpWord: toAdd.jpWord ? toAdd.jpWord : "",
           jpDef: toAdd.jpDef ? toAdd.jpDef : "",
@@ -156,7 +156,7 @@ export default {
               .collection('words')
               .doc(this.word.id)
               .update({
-          word: toUpdate.word,
+          word: toUpdate.word.toLowerCase(),
           def: toUpdate.def,
           jpWord: toUpdate.jpWord ? toUpdate.jpWord : "",
           jpDef: toUpdate.jpDef ? toUpdate.jpDef : "",

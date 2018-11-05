@@ -1,19 +1,33 @@
 <template>
   <v-container fluid grid-list-lg class="elevation-6 ma-0"> 
     <v-layout>
-      <v-btn 
-        color="blue" 
-        dark
-        @click="closeList()">Close
-        <v-icon dark right>close</v-icon>
-      </v-btn>
+      <v-flex xs2>
+        <v-btn 
+          color="blue" 
+          dark
+          @click="closeList()">Close
+          <v-icon dark right>close</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex xs4>
+        <v-select
+          :items="['Alphabetical', 'Date Added']"
+          v-model="sortEnum"
+          menu-props="auto"
+          label="Sort By"
+          hide-details
+          @change="updateSort()">
+        </v-select>
+      </v-flex>
       <v-spacer></v-spacer>
-      <v-btn 
-        color="red" 
-        dark
-        @click="deleteList()">Delete List
-        <v-icon dark right>delete</v-icon>
-      </v-btn>
+      <v-flex xs2>
+        <v-btn 
+          color="red" 
+          dark
+          @click="deleteList()">Delete List
+          <v-icon dark right>delete</v-icon>
+        </v-btn>
+      </v-flex>
     </v-layout>
     <v-expansion-panel
       v-model="showWordDetails"
@@ -153,8 +167,9 @@ export default {
   },
   data() {
     return {
-      words: [],
-      list: {},
+      wordsByAlpha: [],
+      wordsByDate: [],
+      sortEnum: "Date Added",
       wordShow: false,
       word: { },
       showWordDetails: []
@@ -163,14 +178,25 @@ export default {
   firestore() {
     const listId = this.$props.listId;
     const userId = this.$props.userId;
+
     return {
-      words: users.doc(userId)
-                  .collection('wordLists')
-                  .doc(listId)
-                  .collection('words'),
-      list: users.doc(userId)
-                  .collection('wordLists')
-                  .doc(listId)
+      wordsByAlpha: users.doc(userId)
+                        .collection('wordLists')
+                        .doc(listId)
+                        .collection('words').orderBy('word'),
+      wordsByDate: users.doc(userId)
+                        .collection('wordLists')
+                        .doc(listId)
+                        .collection('words').orderBy('created')
+    }
+  },
+  computed: {
+    words() {
+      if(this.sortEnum === "Date Added") {
+        return this.wordsByDate;
+      }else if(this.sortEnum === "Alphabetical") {
+        return this.wordsByAlpha;
+      }
     }
   },
   components: {
@@ -241,6 +267,16 @@ export default {
     },
     deleteList() {
       this.$emit('deleteList', this.listId);
+    },
+    updateSort() {
+      var listSort = this.$data.listSort[this.$data.sortEnum];
+      var userId = this.userId;
+      var listId = this.listId;
+      
+      this.words = users.doc(userId)
+                                    .collection('wordLists')
+                                    .doc(listId)
+                                    .collection('words').orderBy(listSort);
     }
   }
 }
