@@ -1,14 +1,6 @@
 <template>
   <v-container fluid grid-list-lg class="elevation-6 ma-0"> 
-    <v-layout>
-      <v-flex xs2>
-        <v-btn 
-          color="blue" 
-          dark
-          @click="closeList()">Close
-          <v-icon dark right>close</v-icon>
-        </v-btn>
-      </v-flex>
+    <v-layout wrap>
       <v-flex xs4>
         <v-select
           :items="['Alphabetical', 'Date Added']"
@@ -19,14 +11,36 @@
           @change="showWordDetails = [ ]">
         </v-select>
       </v-flex>
-      <v-spacer></v-spacer>
-      <v-flex xs2>
-        <v-btn 
-          color="red" 
-          dark
-          @click="deleteList()">Delete List
-          <v-icon dark right>delete</v-icon>
-        </v-btn>
+      <v-flex xs12>
+        <v-layout>
+          <v-flex xs5>
+            <v-btn 
+              color="blue" 
+              dark
+              @click="closeList()">Close
+              <v-icon dark right>close</v-icon>
+            </v-btn>
+            <v-btn 
+              color="blue" 
+              dark
+              @click="expandAll()">Expand All
+            </v-btn>
+            <v-btn 
+              color="blue" 
+              dark
+              @click="collapseAll()">Collapse All
+            </v-btn>
+          </v-flex>
+          <v-spacer></v-spacer>
+          <v-flex xs2>
+            <v-btn 
+              color="red" 
+              dark
+              @click="deleteList()">Delete List
+              <v-icon dark right>delete</v-icon>
+            </v-btn>
+          </v-flex>
+        </v-layout>
       </v-flex>
     </v-layout>
     <v-expansion-panel
@@ -262,11 +276,17 @@ export default {
                 })
     },
     closeList() {
-      this.showWordDetails = [];
+      this.showWordDetails = [];console.log(this.showWordDetails.length);
       this.$emit('closeList');
     },
     deleteList() {
       this.$emit('deleteList', this.listId);
+    },
+    expandAll() {
+      this.showWordDetails = [...Array(this.words.length).keys()].map(_ => true);
+    },
+    collapseAll() {
+      this.showWordDetails = [ ];
     }
   }
 }
