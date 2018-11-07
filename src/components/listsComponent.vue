@@ -165,7 +165,7 @@ export default {
         users.doc(this.firebaseUser.uid).collection('wordLists').add({
           listTitle: toAdd.listTitle.toLowerCase(),
           subject: toAdd.subject,
-          languageLevel: toAdd.languageLevel,
+          languageLevel: toAdd.languageLevel ? toAdd.languageLevel : 'en',
           created: firebase.firestore.Timestamp.fromDate(new Date()),
           lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date()),

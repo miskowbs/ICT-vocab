@@ -87,7 +87,7 @@ export default {
           jpDef: "",
           memo: "",
           mnemo: "",
-          languageLevel: ""
+          languageLevel: "en"
         }
       }
     },
