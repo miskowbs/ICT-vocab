@@ -91,6 +91,8 @@ export default {
         vm.firebaseUser = user;
         vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
         vm.renderListOfLists = true;
+      } else {
+        vm.loginDialog = true;
       }
     })
   },
@@ -119,13 +121,9 @@ export default {
       firebaseUser: {},
       photoURL: {},
       googleLoginImgUrl: "./assets/btn_google_signin_dark_normal_web.png",
-      renderListOfLists: false
+      renderListOfLists: false,
+      loginDialog: false
     };
-  },
-  computed: {
-    loginDialog() {
-      return !this.renderListOfLists;
-    }
   },
   methods: {
     logOut() {
