@@ -36,7 +36,7 @@
               <v-flex xs12>
                 <v-btn
                   flat
-                  >
+                  @click="loginRedirect()">
                   <img
                     src="./assets/btn_google_signin_dark_normal_web.png" />
                 </v-btn>
@@ -87,20 +87,7 @@ export default {
   beforeCreate: function() {
     var vm = this;
     firebase.auth().onAuthStateChanged(function(user) {
-      if(!user) {
-        // firebase.auth().signInWithPopup(provider).then(function(result) {
-        // var token = result.credential.accessToken; 
-        // if(result.isNewUser) {
-        //   console.log("Is a New User");
-        // }
-        // }).catch(function(error) {
-        //   console.log(error);
-        //   var errorCode = error.code;
-        //   var errorMessage = error.message;
-        //   var email = error.email;
-        //   var credential = error.credential;
-        // })
-      } else {
+      if(user) {
         vm.firebaseUser = user;
         vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
         vm.renderListOfLists = true;
@@ -143,9 +130,28 @@ export default {
   methods: {
     logOut() {
       firebase.auth().signOut();
+      this.renderListOfLists = false;
+      this.rightDrawer = false;
+    },
+    loginRedirect() {
+      firebase.auth().signInWithRedirect(provider);
+    //   firebase.auth().signInWithPopup(provider).then(function(result) {
+    //   var token = result.credential.accessToken; 
+    //   if(result.isNewUser) {
+    //     console.log("Is a New User");
+    //   }
+    //   }).catch(function(error) {
+    //     console.log(error);
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     var email = error.email;
+    //     var credential = error.credential;
+    //   })
+    // }
+    // The above is a signInWithPopup example
     }
   }
-};
+}
 </script>
 
 
