@@ -91,6 +91,14 @@ export default {
         vm.firebaseUser = user;
         vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
         vm.renderListOfLists = true;
+
+        users.doc(user.uid).get().then((docSnap) => {
+          if(!docSnap.exists) {
+            users.doc(user.uid).set({
+              role: 'student'
+            });
+          }
+        })
       } else {
         vm.loginDialog = true;
       }
