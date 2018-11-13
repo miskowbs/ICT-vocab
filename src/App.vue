@@ -17,9 +17,11 @@
       </v-avatar>
     </v-toolbar>
     <v-content>
+      <studentsComponent 
+        v-if="renderStudents"/>
       <listsComponent 
-      :firebaseUser=firebaseUser
-      v-if="renderListOfLists" />
+        :firebaseUser=firebaseUser
+        v-if="renderListOfLists" />
       <v-dialog
         persistent 
         max-width="320"
@@ -78,6 +80,7 @@
 
 <script>
 import listsComponent from "./components/listsComponent";
+import studentsComponent from "./components/studentsComponent";
 import { users } from "./firebase";
 var firebase = require('firebase');
 var provider = new firebase.auth.GoogleAuthProvider();
@@ -95,7 +98,14 @@ export default {
         users.doc(user.uid).get().then((docSnap) => {
           if(!docSnap.exists) {
             users.doc(user.uid).set({
-              role: 'student'
+              role: 'student',
+              name: vm.firebaseUser.providerData[0].displayName
+            });
+          } else {
+            users.doc(user.uid).onSnapshot((doc) => {
+              if(doc.data().role === "admin") {
+                vm.renderStudents = true;
+              }
             });
           }
         })
@@ -108,29 +118,25 @@ export default {
     
   },
   components: {
-    listsComponent
+    listsComponent,
+    studentsComponent
   },
   data() {
     return {
       clipped: true,
       drawer: true,
       fixed: false,
-      items: [
-        {
-          icon: "bubble_chart",
-          title: "Inspire"
-        }
-      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: "ICT Vocab",
       tile: false,
       firebaseUser: {},
-      photoURL: {},
+      photoURL: {}, 
       googleLoginImgUrl: "./assets/btn_google_signin_dark_normal_web.png",
       renderListOfLists: false,
-      loginDialog: false
+      loginDialog: false,
+      renderStudents: false
     };
   },
   methods: {
