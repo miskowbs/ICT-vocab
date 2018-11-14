@@ -15,14 +15,22 @@
             class="display-1 mb-auto text-capitalize">
             {{ student.name }}
           </v-flex>
-          <!-- TODO: PUT, in another v-flex the last 
-          logged in and last modified dates -->
+          <v-spacer/>
+          <v-flex xs2>
+            <h4 class="title mb-auto">Last Sign In:</h4>
+            <h4 class="title mb-auto">Latest Change:</h4>
+          </v-flex>
+          <v-flex>
+            <h4 class="title mb-auto">{{ student.lastSignIn.toDate().toLocaleDateString('ja-JP') }} </h4>
+            <h4 class="title mb-auto">{{ student.latestChange.toDate().toLocaleDateString('ja-JP') }} </h4>
+          </v-flex>
         </v-layout>
         <v-card>
           <!-- TODO: Put Lists Component here
           Factor in that if something is added/changed
           here, that it will not be reflected in the last
           seen fields -->
+          
         </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
