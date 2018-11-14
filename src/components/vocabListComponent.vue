@@ -241,6 +241,9 @@ export default {
               .update({
                 lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
               });
+        users.doc(userId).update({
+          lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+        })
       }
     },
     deleteWord(index) {
@@ -260,6 +263,10 @@ export default {
             .doc(idToDelete)
             .delete()
             .then(() => {
+              users.doc(userId).update({
+                latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
+                lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+              })
               vm.updateCount();
             })
     },

@@ -99,7 +99,8 @@ export default {
           if(!docSnap.exists) {
             users.doc(user.uid).set({
               role: 'student',
-              name: vm.firebaseUser.providerData[0].displayName
+              name: vm.firebaseUser.providerData[0].displayName,
+              lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
             });
           } else {
             users.doc(user.uid).onSnapshot((doc) => {
@@ -107,6 +108,9 @@ export default {
                 vm.renderStudents = true;
               }
             });
+            users.doc(user.uid).update({ 
+              lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+            })
           }
         })
       } else {

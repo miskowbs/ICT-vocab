@@ -171,6 +171,10 @@ export default {
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date()),
           wordCount: 0
         });
+        users.doc(this.firebaseUser.uid).update({
+          latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
+          lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+        })
         
         if(this.showListInfo.length > 0) {
           this.showListInfo.push(true);
@@ -199,6 +203,10 @@ export default {
           lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
         });
 
+      users.doc(this.firebaseUser.uid).update({
+          lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+        })
+
       this.showFab = false;
       this.showVocabList = true;
     },
@@ -208,10 +216,16 @@ export default {
       this.showListInfo = [ ];
     },
     deleteList(listId) {
-      users.doc(this.firebaseUser.uid)
+      var userId = this.firebaseUser.uid;
+      users.doc(userId)
             .collection('wordLists')
             .doc(listId)
-            .delete();
+            .delete().then(() => {
+              users.doc(userId).update({
+                lastSignIn: firebase.firestore.Timestamp.fromDate(new Date()),
+                latestChange: firebase.firestore.Timestamp.fromDate(new Date())
+              })
+            });
 
       this.showAllLists();
     }

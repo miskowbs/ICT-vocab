@@ -136,6 +136,11 @@ export default {
           lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
         }).then(function () {
+          users.doc(userId).update({
+            latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
+            lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+          })
+
           vm.$emit('updateParent');
           vm.$emit('closeDialog');
         });
@@ -165,12 +170,16 @@ export default {
           languageLevel: toUpdate.languageLevel,
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
         }).then(function () {
-            vm.$emit('updateParent');
-            vm.$emit('closeDialog');
+          users.doc(userId).update({
+            latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
+            lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+          })
+
+          vm.$emit('updateParent');
+          vm.$emit('closeDialog');
         });
       }
     }
   }
-
 }
 </script>
