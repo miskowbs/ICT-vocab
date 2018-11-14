@@ -20,7 +20,7 @@
       <studentsComponent 
         v-if="renderStudents"/>
       <listsComponent 
-        :firebaseUser=firebaseUser
+        :userId="firebaseUser.uid"
         v-if="renderListOfLists" />
       <v-dialog
         persistent 
@@ -92,6 +92,7 @@ export default {
     firebase.auth().onAuthStateChanged(function(user) {
       if(user) {
         vm.firebaseUser = user;
+        console.log(vm.firebaseUser.uid);
         vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
         vm.renderListOfLists = true;
 

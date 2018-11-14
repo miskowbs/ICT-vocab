@@ -8,8 +8,7 @@
         v-for="(student, index) in students"
         :key="index">
         <v-layout 
-          slot="header"
-          @click="viewStudentsList(index)">
+          slot="header">
           <v-flex 
             xs8
             class="display-1 mb-auto text-capitalize">
@@ -26,11 +25,10 @@
           </v-flex>
         </v-layout>
         <v-card>
-          <!-- TODO: Put Lists Component here
-          Factor in that if something is added/changed
-          here, that it will not be reflected in the last
-          seen fields -->
-          
+          <v-card-text>
+            <listsComponent
+              :userId="student.id" />
+          </v-card-text>
         </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -46,6 +44,9 @@ export default {
   props: {
 
   },
+  components: {
+    listsComponent
+  },
   data() {
     return {
     showStudentDetails: [],
@@ -58,9 +59,7 @@ export default {
     } 
   },
   methods: {
-    viewStudentsList(index) {
-
-    }
+    
   }
 }
 </script>

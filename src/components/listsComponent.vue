@@ -57,7 +57,7 @@
     <vocabListComponent
       v-if="showVocabList"
       :listId="vocabListId"
-      :userId="firebaseUser.uid"
+      :userId="userId"
       v-on:closeList="showAllLists()"
       v-on:deleteList="deleteList" />
     <v-dialog
@@ -106,7 +106,10 @@ var firebase = require('firebase');
 export default {
   name: "listsComponent",
   props: {
-    firebaseUser: {}
+    userId: {
+      required: true,
+      type: String
+    }
   },
   data() {
     return {
@@ -143,13 +146,13 @@ export default {
   },
   firestore() {
     return {
-      vocabListsByTitle: users.doc(this.firebaseUser.uid)
+      vocabListsByTitle: users.doc(this.userId)
                               .collection('wordLists')
                               .orderBy('listTitle'),
-      vocabListsByEdit: users.doc(this.firebaseUser.uid)
+      vocabListsByEdit: users.doc(this.userId)
                               .collection('wordLists')
                               .orderBy('lastChanged'),
-      vocabListsByViewed: users.doc(this.firebaseUser.uid)
+      vocabListsByViewed: users.doc(this.userId)
                               .collection('wordLists')
                               .orderBy('lastViewed')
     }
@@ -162,7 +165,7 @@ export default {
 
       if(this.newList) {
         var toAdd = this.newList;
-        users.doc(this.firebaseUser.uid).collection('wordLists').add({
+        users.doc(this.userId).collection('wordLists').add({
           listTitle: toAdd.listTitle.toLowerCase(),
           subject: toAdd.subject,
           languageLevel: toAdd.languageLevel ? toAdd.languageLevel : 'en',
@@ -171,7 +174,7 @@ export default {
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date()),
           wordCount: 0
         });
-        users.doc(this.firebaseUser.uid).update({
+        users.doc(this.userId).update({
           latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
           lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
         })
@@ -199,11 +202,11 @@ export default {
         }
       }
 
-      users.doc(this.firebaseUser.uid).collection('wordLists').doc(this.vocabListId).update({
+      users.doc(this.userId).collection('wordLists').doc(this.vocabListId).update({
           lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
         });
 
-      users.doc(this.firebaseUser.uid).update({
+      users.doc(this.userId).update({
           lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
         })
 
@@ -216,7 +219,7 @@ export default {
       this.showListInfo = [ ];
     },
     deleteList(listId) {
-      var userId = this.firebaseUser.uid;
+      var userId = this.userId;
       users.doc(userId)
             .collection('wordLists')
             .doc(listId)
