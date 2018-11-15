@@ -92,7 +92,6 @@ export default {
     firebase.auth().onAuthStateChanged(function(user) {
       if(user) {
         vm.firebaseUser = user;
-        console.log(vm.firebaseUser.uid);
         vm.photoURL = vm.firebaseUser.providerData[0].photoURL;
         vm.renderListOfLists = true;
 
@@ -101,7 +100,8 @@ export default {
             users.doc(user.uid).set({
               role: 'student',
               name: vm.firebaseUser.providerData[0].displayName,
-              lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+              lastSignIn: firebase.firestore.Timestamp.fromDate(new Date()),
+              latestChange: firebase.firestore.Timestamp.fromDate(new Date())
             });
           } else {
             users.doc(user.uid).onSnapshot((doc) => {
