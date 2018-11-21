@@ -27,7 +27,8 @@
         <v-card>
           <v-card-text>
             <listsComponent
-              :userId="student.id" />
+              :userId="student.id"
+              :updateViewDate="false" />
           </v-card-text>
         </v-card>
       </v-expansion-panel-content>

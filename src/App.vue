@@ -21,6 +21,7 @@
         v-if="renderStudents"/>
       <listsComponent 
         :userId="firebaseUser.uid"
+        :updateViewDate="true"
         v-if="renderListOfLists" />
       <v-dialog
         persistent 

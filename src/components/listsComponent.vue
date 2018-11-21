@@ -30,8 +30,8 @@
                         </v-flex>
                         <v-spacer/>
                         <v-flex xs4>
-                            <h4 class="mb-auto">Last Viewed: {{ list.lastViewed.toDate().toLocaleDateString('ja-JP') }} </h4>
-                            <h4 class="mb-auto">Last Changed: {{ list.lastChanged.toDate().toLocaleDateString('ja-JP') }} </h4>
+                            <h4 class="mb-auto">Last Viewed: {{ list.lastViewed ? list.lastViewed.toDate().toLocaleDateString('ja-JP') : "Never" }} </h4>
+                            <h4 class="mb-auto">Last Changed: {{ list.lastChanged ? list.lastChanged.toDate().toLocaleDateString('ja-JP') : "Never" }} </h4>
                         </v-flex>
                         <v-flex xs2>
                             <h3>Words: {{ list.wordCount }} </h3>
@@ -109,6 +109,10 @@ export default {
     userId: {
       required: true,
       type: String
+    },
+    updateViewDate: {
+      required: true,
+      type: Boolean
     }
   },
   data() {
@@ -170,14 +174,16 @@ export default {
           subject: toAdd.subject,
           languageLevel: toAdd.languageLevel ? toAdd.languageLevel : 'en',
           created: firebase.firestore.Timestamp.fromDate(new Date()),
-          lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
-          lastChanged: firebase.firestore.Timestamp.fromDate(new Date()),
           wordCount: 0
         });
-        users.doc(this.userId).update({
-          latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
-          lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
-        })
+
+        var userFieldsToUpdate = { latestChange: firebase.firestore.Timestamp.fromDate(new Date()) };
+
+        if(this.updateViewDate) {
+          userFieldsToUpdate.lastSignIn = firebase.firestore.Timestamp.fromDate(new Date());
+        }
+
+        users.doc(this.userId).update(userFieldsToUpdate);
         
         if(this.showListInfo.length > 0) {
           this.showListInfo.push(true);
@@ -201,14 +207,15 @@ export default {
           i == clicked ? showListInfo.push(true) : showListInfo.push(false);
         }
       }
+      if(this.updateViewDate) {
+        users.doc(this.userId).collection('wordLists').doc(this.vocabListId).update({
+            lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
+          });
 
-      users.doc(this.userId).collection('wordLists').doc(this.vocabListId).update({
-          lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
-        });
-
-      users.doc(this.userId).update({
-          lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
-        })
+        users.doc(this.userId).update({
+            lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+          })
+      }
 
       this.showFab = false;
       this.showVocabList = true;
@@ -220,14 +227,18 @@ export default {
     },
     deleteList(listId) {
       var userId = this.userId;
+      var vm = this;
       users.doc(userId)
             .collection('wordLists')
             .doc(listId)
             .delete().then(() => {
-              users.doc(userId).update({
-                lastSignIn: firebase.firestore.Timestamp.fromDate(new Date()),
-                latestChange: firebase.firestore.Timestamp.fromDate(new Date())
-              })
+              var toUpdate = { latestChange: firebase.firestore.Timestamp.fromDate(new Date()) };
+
+              if(vm.updateViewDate) {
+                toUpdate.lastSignIn = firebase.firestore.Timestamp.fromDate(new Date());
+              }
+
+              users.doc(userId).update(toUpdate);
             });
 
       this.showAllLists();
