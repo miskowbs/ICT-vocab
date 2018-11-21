@@ -105,7 +105,7 @@ export default {
       type: Boolean,
       required: true
     },
-    updateWordDate: {
+    updateViewDate: {
       type: Boolean,
       required: true
     }
@@ -136,14 +136,15 @@ export default {
           memo: toAdd.memo ? toAdd.memo : "",
           mnemo: toAdd.mnemo ? toAdd.mnemo : "",
           languageLevel: toAdd.languageLevel,
-          created: firebase.firestore.Timestamp.fromDate(new Date()),
-          lastViewed: firebase.firestore.Timestamp.fromDate(new Date()),
-          lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
+          created: firebase.firestore.Timestamp.fromDate(new Date())
         }).then(function () {
-          users.doc(userId).update({
-            latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
-            lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
-          })
+          var usersFieldsToUpdate = { latestChange: firebase.firestore.Timestamp.fromDate(new Date()) }
+
+          if(vm.updateViewDate) {
+            usersFieldsToUpdate.lastSignIn = firebase.firestore.Timestamp.fromDate(new Date());
+          }
+
+          users.doc(userId).update(usersFieldsToUpdate);
 
           vm.$emit('updateParent');
           vm.$emit('closeDialog');
@@ -174,10 +175,13 @@ export default {
           languageLevel: toUpdate.languageLevel,
           lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
         }).then(function () {
-          users.doc(userId).update({
-            latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
-            lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
-          })
+          var usersFieldsToUpdate = { latestChange: firebase.firestore.Timestamp.fromDate(new Date()) }
+
+          if(vm.updateViewDate) {
+            usersFieldsToUpdate.lastSignIn = firebase.firestore.Timestamp.fromDate(new Date());
+          }
+
+          users.doc(userId).update(usersFieldsToUpdate);
 
           vm.$emit('updateParent');
           vm.$emit('closeDialog');

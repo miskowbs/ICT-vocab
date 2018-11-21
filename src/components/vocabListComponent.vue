@@ -73,14 +73,17 @@
             <h4 class="title mb-auto" >
               Last Viewed: {{ 
                 word.lastViewed ? 
-                word.lastViewed.toDate().toLocaleDateString('ja-JP') :
-                "never"
+                  word.lastViewed.toDate().toLocaleDateString('ja-JP') :
+                  "Never"
               }}
             </h4>
             <h4 
               class="body-1 mb-auto" 
               v-show="showWordDetails[index]">
-              Last Changed: {{ word.lastChanged.toDate().toLocaleDateString('ja-JP') }}
+              Last Changed: {{ 
+                word.lastChanged ? 
+                  word.lastChanged.toDate().toLocaleDateString('ja-JP') : 
+                  "Never"}}
             </h4>
             <h4 
               class="body-1 mb-auto" 
@@ -274,7 +277,6 @@ export default {
             .doc(idToDelete)
             .delete()
             .then(() => {
-              //TODO: Update this 
               var usersFieldsToUpdate = { latestChange: firebase.firestore.Timestamp.fromDate(new Date()) };
 
               if(vm.updateViewDate) {
