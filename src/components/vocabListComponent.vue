@@ -71,7 +71,11 @@
           </v-flex>
           <v-flex xs4>
             <h4 class="title mb-auto" >
-              Last Viewed: {{ word.lastViewed.toDate().toLocaleDateString('ja-JP') }}
+              Last Viewed: {{ 
+                word.lastViewed ? 
+                word.lastViewed.toDate().toLocaleDateString('ja-JP') :
+                "never"
+              }}
             </h4>
             <h4 
               class="body-1 mb-auto" 
@@ -158,7 +162,8 @@
       :wordCount="words.length"
       :listId="listId"
       :userId="userId"
-      :wordShow="true"/>
+      :wordShow="true"
+      :updateViewDate="updateViewDate"/>
   </v-container>
 </template>
 
@@ -176,6 +181,10 @@ export default {
     },
     userId: {
       type: String,
+      required: true
+    },
+    updateViewDate: {
+      type: Boolean,
       required: true
     }
   },
@@ -233,17 +242,19 @@ export default {
         var userId = this.userId;
         var listId = this.listId;
         var words = this.words;
-        users.doc(userId)
-              .collection('wordLists')
-              .doc(listId)
-              .collection('words')
-              .doc(words[index].id)
-              .update({
-                lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
-              });
-        users.doc(userId).update({
-          lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
-        })
+        if(this.updateViewDate) {
+          users.doc(userId)
+                .collection('wordLists')
+                .doc(listId)
+                .collection('words')
+                .doc(words[index].id)
+                .update({
+                  lastViewed: firebase.firestore.Timestamp.fromDate(new Date())
+                });
+          users.doc(userId).update({
+            lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
+          })
+        }
       }
     },
     deleteWord(index) {
@@ -263,10 +274,14 @@ export default {
             .doc(idToDelete)
             .delete()
             .then(() => {
-              users.doc(userId).update({
-                latestChange: firebase.firestore.Timestamp.fromDate(new Date()),
-                lastSignIn: firebase.firestore.Timestamp.fromDate(new Date())
-              })
+              //TODO: Update this 
+              var usersFieldsToUpdate = { latestChange: firebase.firestore.Timestamp.fromDate(new Date()) };
+
+              if(vm.updateViewDate) {
+                usersFieldsToUpdate.lastSignIn = firebase.firestore.Timestamp.fromDate(new Date());
+              }
+
+              users.doc(userId).update(usersFieldsToUpdate)
               vm.updateCount();
             })
     },

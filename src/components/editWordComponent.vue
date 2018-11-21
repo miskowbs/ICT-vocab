@@ -104,6 +104,10 @@ export default {
     wordShow: {
       type: Boolean,
       required: true
+    },
+    updateWordDate: {
+      type: Boolean,
+      required: true
     }
   },
   computed: {

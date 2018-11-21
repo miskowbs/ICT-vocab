@@ -30,8 +30,20 @@
                         </v-flex>
                         <v-spacer/>
                         <v-flex xs4>
-                            <h4 class="mb-auto">Last Viewed: {{ list.lastViewed ? list.lastViewed.toDate().toLocaleDateString('ja-JP') : "Never" }} </h4>
-                            <h4 class="mb-auto">Last Changed: {{ list.lastChanged ? list.lastChanged.toDate().toLocaleDateString('ja-JP') : "Never" }} </h4>
+                            <h4 class="mb-auto">
+                              Last Viewed: {{ 
+                                list.lastViewed ? 
+                                  list.lastViewed.toDate().toLocaleDateString('ja-JP') : 
+                                  "Never" 
+                              }} 
+                            </h4>
+                            <h4 class="mb-auto">
+                              Last Changed: {{ 
+                                list.lastChanged ? 
+                                  list.lastChanged.toDate().toLocaleDateString('ja-JP') : 
+                                  "Never" 
+                              }} 
+                            </h4>
                         </v-flex>
                         <v-flex xs2>
                             <h3>Words: {{ list.wordCount }} </h3>
@@ -58,6 +70,7 @@
       v-if="showVocabList"
       :listId="vocabListId"
       :userId="userId"
+      :updateViewDate="updateViewDate"
       v-on:closeList="showAllLists()"
       v-on:deleteList="deleteList" />
     <v-dialog
