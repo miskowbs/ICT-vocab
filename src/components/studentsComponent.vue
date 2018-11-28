@@ -36,9 +36,60 @@
     <v-btn 
       top
       right
-      color="blue">Push Lists
+      color="blue"
+      @click="pushList = true">Push Lists
       <v-icon right>playlist_add</v-icon>
     </v-btn>
+    <v-dialog
+      v-model="pushList"
+      >
+      <v-card>
+          <v-card-title>
+            <span class="headline">User Profile</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6>
+                  <v-subheader>Students</v-subheader>
+                  <v-list subheader>
+                    <v-list-tile
+                      v-for="(student, index) in students"
+                      :key="index">
+                      <v-list-tile-action>
+                        <v-checkbox v-model="studentCheckBoxes[index]" />
+                      </v-list-tile-action>
+                      <v-list-tile-content @click="studentCheckBoxes[index] != studentCheckBoxes[index]">
+                        <v-list-tile-title>{{ student.name }}</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-subheader>Vocab Lists</v-subheader>
+                  <v-list subheader>
+                    <v-list-tile
+                      v-for="(list, index) in vocabLists"
+                      :key="index">
+                      <v-list-tile-action>
+                        <v-checkbox v-model="listCheckBoxes[index]" />
+                      </v-list-tile-action>
+                      <v-list-tile-content @click="listCheckBoxes[index] != listCheckBoxes[index]">
+                        <v-list-tile-title>{{ list.listTitle }}</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue" flat @click="pushList = false">Close</v-btn>
+            <v-btn color="blue" flat @click="pushList = false">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -49,7 +100,10 @@ import listsComponent from "./listsComponent";
 
 export default {
   props: {
-
+    userId: {
+      required: true,
+      type: String
+    }
   },
   components: {
     listsComponent
@@ -57,12 +111,19 @@ export default {
   data() {
     return {
     showStudentDetails: [],
-    students: []
+    students: [],
+    vocabLists: [],
+    pushList: false,
+    studentCheckBoxes: [],
+    listCheckBoxes: []
     }
   },
   firestore() {
     return {
-      students: users.where("role", "==", "student")
+      students: users.where("role", "==", "student"),
+      vocabLists: users.doc(this.userId)
+                              .collection('wordLists')
+                              .orderBy('listTitle')
     } 
   },
   methods: {

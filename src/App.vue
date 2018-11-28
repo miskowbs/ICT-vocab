@@ -18,7 +18,8 @@
     </v-toolbar>
     <v-content>
       <studentsComponent 
-        v-if="renderStudents"/>
+        v-if="renderStudents"
+        :userId="firebaseUser.uid"/>
       <listsComponent 
         :userId="firebaseUser.uid"
         :updateViewDate="true"
