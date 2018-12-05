@@ -300,7 +300,7 @@ export default {
                 })
     },
     closeList() {
-      this.showWordDetails = [];console.log(this.showWordDetails.length);
+      this.showWordDetails = [];
       this.$emit('closeList');
     },
     deleteList() {

@@ -86,7 +86,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue" flat @click="pushList = false">Close</v-btn>
-            <v-btn color="blue" flat @click="pushList = false">Save</v-btn>
+            <v-btn color="blue" :disabled="disabledPushButton" flat @click="pushList = false">Push</v-btn>
           </v-card-actions>
         </v-card>
     </v-dialog>
@@ -118,6 +118,18 @@ export default {
     listCheckBoxes: []
     }
   },
+  computed: {
+    disabledPushButton() {
+      var condition = (this.studentCheckBoxes != null &&
+                      this.studentCheckBoxes.length <= 0 ||
+                      this.studentCheckBoxes.every(e => { return !e })) ||
+                      (this.listCheckBoxes != null &&
+                      this.listCheckBoxes.length <= 0 ||
+                      this.listCheckBoxes.every(e => { return !e }))
+
+      return condition 
+    },
+  },
   firestore() {
     return {
       students: users.where("role", "==", "student"),
@@ -127,7 +139,9 @@ export default {
     } 
   },
   methods: {
-    
+    pustToStudents() {
+
+    }
   }
 }
 </script>
