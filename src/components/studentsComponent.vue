@@ -86,7 +86,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue" flat @click="pushList = false">Close</v-btn>
-            <v-btn color="blue" :disabled="disabledPushButton" flat @click="pushList = false">Push</v-btn>
+            <v-btn color="blue" :disabled="disabledPushButton" flat @click="pushToStudents()">Push</v-btn>
           </v-card-actions>
         </v-card>
     </v-dialog>
@@ -136,7 +136,8 @@ export default {
   },
   methods: {
     pustToStudents() {
-
+      //TODO: push a list to the students
+      this.pushList = false;
     }
   }
 }
