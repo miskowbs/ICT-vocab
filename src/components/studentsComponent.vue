@@ -120,12 +120,8 @@ export default {
   },
   computed: {
     disabledPushButton() {
-      var condition = (this.studentCheckBoxes != null &&
-                      this.studentCheckBoxes.length <= 0 ||
-                      this.studentCheckBoxes.every(e => { return !e })) ||
-                      (this.listCheckBoxes != null &&
-                      this.listCheckBoxes.length <= 0 ||
-                      this.listCheckBoxes.every(e => { return !e }))
+      var condition = this.studentCheckBoxes.every(e => { return !e }) ||
+                      this.listCheckBoxes.every(e => { return !e })
 
       return condition 
     },
