@@ -139,7 +139,7 @@ export default {
 
       return result;
     },
-    listIDsToPush() {
+    listsToPush() {
       var lists = this.vocabLists;
       var boxes = this.listCheckBoxes;
 
@@ -147,7 +147,7 @@ export default {
 
       for(var i=0; i<boxes.length; i++) {
         if(boxes[i]) {
-          result.push(lists[i].id)
+          result.push(lists[i])
         }
       }
 
@@ -164,15 +164,46 @@ export default {
   },
   methods: {
     pushToStudents() {
-      //TODO: push a list to the students
+      var em = this;
       var studentIDs = this.studentIDsToPushTo;
-      var listIDs = this.listIDsToPush;
-      console.log(studentIDs);
-      console.log(listIDs);
+      var lists = this.listsToPush;
       
-      
-      
-      this.pushList = false;
+      studentIDs.forEach(id => {
+        lists.forEach(list => {
+          users.doc(id).collection('wordLists').add({
+            languageLevel : list.languageLevel,
+            listTitle : list.listTitle,
+            subject : list.subject,
+            wordCount : list.wordCount,
+            created : firebase.firestore.Timestamp.fromDate(new Date()),
+            lastChanged : firebase.firestore.Timestamp.fromDate(new Date())
+          }).then((docRef) => {
+            users.doc(em.userId)
+            .collection('wordLists')
+            .doc(list.id)
+            .collection('words').get().then(words => {
+              words.forEach(wordDoc => {
+                var word = wordDoc.data();
+                docRef.collection('words').add({
+                  word: word.word,
+                  def: word.def,
+                  jpWord: word.jpWord ? word.jpWord : "",
+                  jpDef: word.jpDef ? word.jpDef : "",
+                  memo: word.memo ? word.memo : "",
+                  mnemo: word.mnemo ? word.mnemo : "",
+                  languageLevel: word.languageLevel,
+                  created: firebase.firestore.Timestamp.fromDate(new Date()),
+                  lastChanged: firebase.firestore.Timestamp.fromDate(new Date())
+                })
+              })
+            }).then(() => {
+              em.pushList = false;
+              em.studentCheckBoxes = [];
+              em.listCheckBoxes = [];
+            })
+          })
+        })
+      })
     }
   }
 }
