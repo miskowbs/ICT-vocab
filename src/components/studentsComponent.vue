@@ -125,6 +125,34 @@ export default {
 
       return condition 
     },
+    studentIDsToPushTo() {
+      var stus = this.students;
+      var boxes = this.studentCheckBoxes;
+
+      var result = [];
+
+      for(var i=0; i<boxes.length; i++) {
+        if(boxes[i]) {
+          result.push(stus[i].id)
+        }
+      }
+
+      return result;
+    },
+    listIDsToPush() {
+      var lists = this.vocabLists;
+      var boxes = this.listCheckBoxes;
+
+      var result = [];
+
+      for(var i=0; i<boxes.length; i++) {
+        if(boxes[i]) {
+          result.push(lists[i].id)
+        }
+      }
+
+      return result;
+    }
   },
   firestore() {
     return {
@@ -135,8 +163,15 @@ export default {
     } 
   },
   methods: {
-    pustToStudents() {
+    pushToStudents() {
       //TODO: push a list to the students
+      var studentIDs = this.studentIDsToPushTo;
+      var listIDs = this.listIDsToPush;
+      console.log(studentIDs);
+      console.log(listIDs);
+      
+      
+      
       this.pushList = false;
     }
   }
