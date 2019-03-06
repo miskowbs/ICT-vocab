@@ -76,6 +76,14 @@
                 <v-flex xs12 sm6>
                   <v-subheader>Vocab Lists</v-subheader>
                   <v-list subheader>
+                    <v-list-tile>
+                      <v-list-tile-action>
+                        <v-checkbox color="pink" v-model="allListsChecked"/>
+                      </v-list-tile-action>
+                      <v-list-tile-content>
+                        <v-list-tile-title>All Lists</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
                     <v-list-tile
                       v-for="(list, index) in vocabLists"
                       :key="index">
@@ -184,6 +192,31 @@ export default {
         stus.forEach(() => newStuCheckBoxes.push(newValue));
 
         this.studentCheckBoxes = newStuCheckBoxes;
+      }
+    },
+    allListsChecked: {
+      get: function() {
+        var lists = this.vocabLists;
+        var boxes = this.listCheckBoxes;
+        if(lists.length == boxes.length) {
+          for(var i = 0; i<boxes.length; i++) {
+            if(typeof boxes[i] == 'undefined' || !boxes[i]) {
+              return false;
+            }
+          }
+          return true;
+        }
+        return false;
+      },
+      set: function(newValue) {
+        //For other calculated values to be reevaluated in a function, 
+        //the whole array must be updated
+        var lists = this.vocabLists;
+        var newBoxes = [];
+
+        lists.forEach(() => newBoxes.push(newValue));
+
+        this.listCheckBoxes = newBoxes;
       }
     }
   },
