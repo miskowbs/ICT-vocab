@@ -53,13 +53,21 @@
                 <v-flex xs12 sm6>
                   <v-subheader>Students</v-subheader>
                   <v-list subheader>
+                    <v-list-tile>
+                      <v-list-tile-action>
+                        <v-checkbox color="pink" v-model="allStudentsChecked"/>
+                      </v-list-tile-action>
+                      <v-list-tile-content>
+                        <v-list-tile-title>All Students</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
                     <v-list-tile
                       v-for="(student, index) in students"
                       :key="index">
                       <v-list-tile-action>
-                        <v-checkbox v-model="studentCheckBoxes[index]" />
+                        <v-checkbox v-model="studentCheckBoxes[index]"/>
                       </v-list-tile-action>
-                      <v-list-tile-content @click="studentCheckBoxes[index] != studentCheckBoxes[index]">
+                      <v-list-tile-content>
                         <v-list-tile-title>{{ student.name }}</v-list-tile-title>
                       </v-list-tile-content>
                     </v-list-tile>
@@ -74,7 +82,7 @@
                       <v-list-tile-action>
                         <v-checkbox v-model="listCheckBoxes[index]" />
                       </v-list-tile-action>
-                      <v-list-tile-content @click="listCheckBoxes[index] != listCheckBoxes[index]">
+                      <v-list-tile-content>
                         <v-list-tile-title>{{ list.listTitle }}</v-list-tile-title>
                       </v-list-tile-content>
                     </v-list-tile>
@@ -123,7 +131,7 @@ export default {
       var condition = this.studentCheckBoxes.every(e => { return !e }) ||
                       this.listCheckBoxes.every(e => { return !e })
 
-      return condition 
+      return condition
     },
     studentIDsToPushTo() {
       var stus = this.students;
@@ -152,6 +160,31 @@ export default {
       }
 
       return result;
+    },
+    allStudentsChecked: {
+      get: function() {
+        var stus = this.students;
+        var stuCheckBoxes = this.studentCheckBoxes;
+        if(stus.length == stuCheckBoxes.length) {
+          for(var i = 0; i<stuCheckBoxes.length; i++) {
+            if(typeof stuCheckBoxes[i] == 'undefined' || !stuCheckBoxes[i]) {
+              return false;
+            }
+          }
+          return true;
+        }
+        return false;
+      },
+      set: function(newValue) {
+        //For other calculated values to be reevaluated in a function, 
+        //the whole array must be updated
+        var stus = this.students;
+        var newStuCheckBoxes = [];
+
+        stus.forEach(() => newStuCheckBoxes.push(newValue));
+
+        this.studentCheckBoxes = newStuCheckBoxes;
+      }
     }
   },
   firestore() {
