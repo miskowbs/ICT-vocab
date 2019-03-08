@@ -12,13 +12,12 @@
         </v-select>
       </v-flex>
       <v-flex xs12>
-        <v-layout>
-          <v-flex xs5>
+        <v-layout justify-space-between row>
             <v-btn 
               color="blue" 
               dark
-              @click="closeList()">Close
-              <v-icon dark right>close</v-icon>
+              @click="wordDialog()">Add Word
+              <v-icon dark right>add</v-icon>
             </v-btn>
             <v-btn 
               color="blue" 
@@ -30,16 +29,19 @@
               dark
               @click="collapseAll()">Collapse All
             </v-btn>
-          </v-flex>
-          <v-spacer></v-spacer>
-          <v-flex xs2>
+          <v-spacer />
+            <v-btn 
+              color="blue" 
+              dark
+              @click="closeList()">Close
+              <v-icon dark right>close</v-icon>
+            </v-btn>
             <v-btn 
               color="red" 
               dark
               @click="deleteList()">Delete List
               <v-icon dark right>delete</v-icon>
             </v-btn>
-          </v-flex>
         </v-layout>
       </v-flex>
     </v-layout>
