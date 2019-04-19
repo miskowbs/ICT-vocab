@@ -16,7 +16,7 @@
             <v-btn 
               color="blue" 
               dark
-              @click="wordDialog()">Add Word
+              @click="newWordDialog()">Add Word
               <v-icon dark right>add</v-icon>
             </v-btn>
             <v-btn 
@@ -134,7 +134,7 @@
           <v-card-actions>
             <v-btn 
               icon
-              @click="wordDialog(word)">
+              @click="editWordDialog(word)">
               <v-icon>notes</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
@@ -156,7 +156,7 @@
         top
         right
         fab
-        @click="wordDialog()">
+        @click="newWordDialog()">
         <v-icon>add</v-icon>
     </v-btn>
     <editWordComponent 
@@ -231,15 +231,15 @@ export default {
     editWordComponent
   },
   methods: {
-    wordDialog() {
+    newWordDialog() {
       this.wordShow = !this.wordShow;
     },
-    wordDialog(editWord) {
+    editWordDialog(editWord) {
       this.word = editWord;
       this.wordShow = !this.wordShow;
     },
     closeDialog() {
-      this.wordDialog();
+      this.newWordDialog();
       this.word = { };
     },
     viewItem(index) {

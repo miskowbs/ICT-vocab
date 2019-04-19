@@ -91,8 +91,6 @@ export default {
         }
       }
     },
-    wordCount: {
-    },
     listId: {
       type: String,
       required: true
@@ -121,7 +119,6 @@ export default {
         var toAdd = this.word;
         var userId = this.userId;
         var listId = this.listId;
-        var wordCount = this.wordCount;
         var vm = this;
 
         users.doc(userId)
@@ -157,7 +154,6 @@ export default {
         var toUpdate = this.word;
         var userId = this.userId;
         var listId = this.listId;
-        var wordCount = this.wordCount;
         var vm = this;
 
         users.doc(userId)
